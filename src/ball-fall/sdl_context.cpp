@@ -9,6 +9,10 @@ SdlContext::SdlContext()
         throw std::runtime_error("SDL_Init failed");
     }
 
+    if (TTF_Init() == -1) {
+        throw std::runtime_error("TTF_Init failed");
+    }
+
     _window = SDL_CreateWindow(
         config::WindowTitle,
         SDL_WINDOWPOS_UNDEFINED,

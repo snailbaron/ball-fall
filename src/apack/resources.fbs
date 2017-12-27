@@ -1,0 +1,20 @@
+file_identifier "BFRE";
+
+namespace BallFall.Resources;
+
+table Resources {
+  fonts:[Font];
+  bitmaps:[Bitmap];
+}
+
+table Font {
+  data:[ubyte];
+}
+
+table Bitmap {
+  width:uint;
+  height:uint;
+  data:[ubyte];
+}
+
+root_type Resources;

@@ -6,10 +6,13 @@ add_executable (
         color.hpp
         config.hpp
         main.cpp
+        resources.cpp
+        resources.cpp
         sdl_context.cpp
         sdl_context.hpp
         timer.cpp
         timer.hpp
+        vector.hpp
         widget.hpp
         widgets.cpp
         widgets.hpp

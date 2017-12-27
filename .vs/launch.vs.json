@@ -1,0 +1,19 @@
+{
+  "version": "0.2.1",
+  "defaults": {},
+  "configurations": [
+    {
+      "type": "default",
+      "project": "CMakeLists.txt",
+      "projectTarget": "apack.exe (src\\apack\\apack.exe)",
+      "name": "apack.exe (src\\apack\\apack.exe)",
+      "args": ["-a", "${projectDir}/assets", "-o", "${projectDir}/src/apack/resources.hpp"]
+    },
+    {
+      "type": "default",
+      "project": "CMakeLists.txt",
+      "projectTarget": "ball-fall.exe (src\\ball-fall\\ball-fall.exe)",
+      "name": "ball-fall.exe (src\\ball-fall\\ball-fall.exe)"
+    }
+  ]
+}
