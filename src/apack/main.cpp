@@ -33,14 +33,19 @@ int main(int argc, char* argv[])
         "Path to assets directory",
         true, "assets", "string");
     TCLAP::ValueArg<std::string> outputHeaderPath(
-        "o", "output",
+        "", "header",
         "Path to output header file",
-        true, "packed.hpp", "string");
+        true, "resources.hpp", "string");
+    TCLAP::ValueArg<std::string> outputDataPath(
+        "", "data",
+        "Path to output data file",
+        true, "resources.data", "string");
 
     try {
         TCLAP::CmdLine cmdLine("Pack resources", ' ');
         cmdLine.add(assetsPathArg);
         cmdLine.add(outputHeaderPath);
+        cmdLine.add(outputDataPath);
         cmdLine.parse(argc, argv);
     } catch (TCLAP::ArgException& e) {
         std::cerr << "error: " << e.error() << " for argument " << e.argId() <<
@@ -90,7 +95,7 @@ int main(int argc, char* argv[])
 
     builder.Finish(resources);
 
-    std::ofstream packedStream("out.data");
+    std::ofstream packedStream(outputDataPath.getValue());
     packedStream.write(
         reinterpret_cast<char*>(builder.GetBufferPointer()),
         builder.GetSize());

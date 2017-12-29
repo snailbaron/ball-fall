@@ -1,15 +1,20 @@
 add_executable (
     apack
         main.cpp
-        resources_generated.h
-)
-
-add_custom_command (
-    OUTPUT resources_generated
-    COMMAND ${FLATC_PROGRAM_PATH} --cpp ${CMAKE_CURRENT_SOURCE_DIR}/resources.fbs
+        ${CMAKE_CURRENT_BINARY_DIR}/include/resources_generated.h
 )
 
 find_program (FLATC_PROGRAM_PATH flatc)
+
+add_custom_command (
+    OUTPUT include/resources_generated.h
+    COMMAND ${FLATC_PROGRAM_PATH}
+        --cpp
+        -o ${CMAKE_CURRENT_BINARY_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/resources.fbs
+)
+
+target_include_directories (apack PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/include)
 
 find_path (TCLAP_INCLUDE_DIR tclap/CmdLine.h)
 target_include_directories (apack PRIVATE ${TCLAP_INCLUDE_DIR})
