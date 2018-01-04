@@ -3,12 +3,17 @@
   "defaults": {},
   "configurations": [
     {
-      "type": "default",
-      "project": "CMakeLists.txt",
-      "projectTarget": "apack.exe (src\\apack\\apack.exe)",
-      "name": "apack.exe (src\\apack\\apack.exe)",
-      "args": ["-a", "${projectDir}/assets", "-o", "${projectDir}/src/apack/resources.hpp"]
+        "type": "default",
+        "project": "CMakeLists.txt",
+        "projectTarget": "apack.exe (src\\apack\\apack.exe)",
+        "name": "apack.exe (src\\apack\\apack.exe)",
+        "args": [
+            "--assets", "D:/code/games/ball-fall/assets",
+            "--data", "D:/code/games/ball-fall/build/x64-Debug/src/generated/resources.data",
+            "--header", "D:/code/games/ball-fall/build/x64-Debug/src/generated/include/resource_ids.hpp"
+        ]
     },
+
     {
       "type": "default",
       "project": "CMakeLists.txt",

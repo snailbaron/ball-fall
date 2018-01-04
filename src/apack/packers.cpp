@@ -26,7 +26,7 @@ std::string toCamelCase(std::string source)
             continue;
         }
 
-        output << capitalize ? std::toupper(ch) : ch;
+        output << static_cast<char>(capitalize ? std::toupper(ch) : ch);
         capitalize = false;
     }
 
@@ -34,9 +34,9 @@ std::string toCamelCase(std::string source)
 }
 
 
-PackFile packByExtension(const std::string& extension, const PackFile& pack)
+PackFile packByExtension(std::string extension, PackFile pack)
 {
-    return [&extension, &pack] (const FileInfo& info, Generator& generator) {
+    return [extension, pack] (const FileInfo& info, Generator& generator) {
         if (info.extension != extension) {
             return;
         }
@@ -48,13 +48,13 @@ std::vector<PackFile> g_packers {
     packByExtension(".ttf", [] (const FileInfo& info, Generator& generator) {
         auto fontId = toCamelCase(info.baseName);
         auto fontFileContent = readFile(info.path);
-        generator.addFont(fontId, fontFileContent);
+        generator.writeFont(fontId, fontFileContent);
     }),
 
     packByExtension(".png", [] (const FileInfo& info, Generator& generator) {
         auto bitmapId = toCamelCase(info.baseName);
         auto bitmapFileContent = readFile(info.path);
-        generator.addBitmap(bitmapId, bitmapFileContent);
+        generator.writeBitmap(bitmapId, bitmapFileContent);
     }),
 };
 

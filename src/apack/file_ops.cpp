@@ -11,7 +11,7 @@ FileInfo makeFileInfo(const fs::path& path)
 {
     FileInfo info;
     info.path = path.string();
-    info.baseName = path.stem.string();
+    info.baseName = path.stem().string();
     info.extension = path.extension().string();
 
     return info;

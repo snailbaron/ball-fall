@@ -1,28 +1,20 @@
-add_subdirectory (repal)
+find_package (SDL2 REQUIRED SDL2::SDL2 SDL2::SDL2main)
 
-add_subdirectory (apack)
+find_path (SDL2_TTF_INCLUDE_DIR SDL2/SDL_ttf.h)
+find_library (SDL2_TTF_LIBRARY SDL2_ttf)
+
+find_path (SDL2_IMAGE_INCLUDE_DIR SDL2/SDL_image.h)
+find_library (SDL2_IMAGE_LIBRARY SDL2_image)
 
 set (generated_dir ${CMAKE_CURRENT_BINARY_DIR}/generated)
-set (resource_data_file ${generated_dir}/resources.data)
 set (generated_include_dir ${generated_dir}/include)
-set (resource_header_file ${generated_include_dir}/resource_ids.hpp)
 
-add_custom_command (
-    OUTPUT
-        ${resource_data_file}
-        ${resource_header_file}
-    COMMAND $<TARGET_FILE:apack>
-        --assets ${CMAKE_SOURCE_DIR}/assets
-        --data ${resource_data_file}
-        --header ${resource_header_file})
+include_directories (${generated_include_dir})
 
-add_custom_target (
-    pack-resources
-    DEPENDS
-        ${resource_data_file}
-        ${resource_header_file})
+add_subdirectory (flat)
+
+add_subdirectory (apack)
+add_dependencies (apack flat-headers)
 
 add_subdirectory (ball-fall)
-
-add_dependencies (ball-fall pack-resources)
-target_include_directories (ball-fall PRIVATE ${generated_include_dir})
+add_dependencies (ball-fall pack-resources apack)

@@ -6,6 +6,6 @@
 
 namespace res {
 
-const TTF_Font* font(FontId fontId);
+//const TTF_Font* font(FontId fontId);
 
 }

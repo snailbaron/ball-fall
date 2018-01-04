@@ -1,19 +1,21 @@
 #pragma once
 
-#include <flatbuffers/flatbuffers.h>
 #include "resources_generated.h"
+
+#include <flatbuffers/flatbuffers.h>
 
 #include <string>
 #include <vector>
 #include <fstream>
+#include <cstdint>
 
 class ResourceWriter {
 public:
     ResourceWriter(const std::string& outputFile);
     ~ResourceWriter();
 
-    void addFont(const std::vector<uint8_t>& data);
-    void addBitmap(const std::vector<uint8_t>& data);
+    void writeFont(const std::vector<uint8_t>& data);
+    void writeBitmap(const std::vector<uint8_t>& data);
 
 private:
     std::ofstream _outFile;
@@ -25,15 +27,4 @@ private:
 struct DataLocation {
     const uint8_t* ptr;
     uint32_t size;
-};
-
-class ResourceReader {
-public:
-    ResourceReader(const std::string& inputFile);
-
-    DataLocation font(uint32_t fontId);
-    DataLocation bitmap(uint32_t bitmapId);
-
-private:
-    const BallFall::Resources::Resources* _resources;
 };

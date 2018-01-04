@@ -6,16 +6,16 @@ Generator::Generator(
     , _resourceGenerator(outputData)
 { }
 
-void Generator::addFont(
+void Generator::writeFont(
     const std::string& fontId, const std::vector<uint8_t>& data)
 {
     _headerGenerator.add("FontId", fontId);
-    _resourceGenerator.addFont(data);
+    _resourceGenerator.writeFont(data);
 }
 
-void Generator::addBitmap(
+void Generator::writeBitmap(
     const std::string& bitmapId, const std::vector<uint8_t>& data)
 {
     _headerGenerator.add("BitmapId", bitmapId);
-    _resourceGenerator.addBitmap(data);
+    _resourceGenerator.writeBitmap(data);
 }

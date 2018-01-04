@@ -1,5 +1,10 @@
 #pragma once
 
+#include <string>
+#include <vector>
+#include <map>
+#include <fstream>
+
 class HeaderWriter {
 public:
     HeaderWriter(const std::string& outputFile);

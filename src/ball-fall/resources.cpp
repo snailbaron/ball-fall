@@ -1,12 +1,5 @@
 #include "resources.hpp"
 
-namespace {
-
-
-
-}
-
-void loadResources()
-{
-
-};
+#include <vector>
+#include <fstream>
+#include <cstdint>
