@@ -13,18 +13,14 @@ add_executable (
         packers.hpp
 )
 
-# Flatbuffers
-find_path (FLATBUFFERS_INCLUDE_DIR flatbuffers/flatbuffers.h)
-find_library (FLATBUFFERS_LIBRARY flatbuffers)
 target_include_directories (apack PRIVATE ${FLATBUFFERS_INCLUDE_DIR})
 target_link_libraries (apack ${FLATBUFFERS_LIBRARY})
 
-# TCLAP
-find_path (TCLAP_INCLUDE_DIR tclap/CmdLine.h)
 target_include_directories (apack PRIVATE ${TCLAP_INCLUDE_DIR})
 
-# SDL2
 target_link_libraries (apack SDL2::SDL2)
+
+target_link_libraries (apack util)
 
 set (resource_data_file ${generated_dir}/resources.data)
 set (resource_header_file ${generated_include_dir}/resource_ids.hpp)

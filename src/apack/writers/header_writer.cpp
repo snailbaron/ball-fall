@@ -23,7 +23,7 @@ HeaderWriter::~HeaderWriter()
         _outFile << "};\n";
     }
 
-    _outFile << "\n\n} // namespace res   fapfap \n";
+    _outFile << "\n} // namespace res\n";
 }
 
 void HeaderWriter::add(std::string enumeration, std::string value)

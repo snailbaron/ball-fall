@@ -1,6 +1,9 @@
 #include "sdl_context.hpp"
 #include "config.hpp"
 
+#include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_image.h>
+
 #include <stdexcept>
 
 SdlContext::SdlContext()
@@ -11,6 +14,10 @@ SdlContext::SdlContext()
 
     if (TTF_Init() == -1) {
         throw std::runtime_error("TTF_Init failed");
+    }
+
+    if (IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG) == -1) {
+        throw std::runtime_error("IMG_Init failed");
     }
 
     _window = SDL_CreateWindow(
@@ -35,5 +42,8 @@ SdlContext::~SdlContext()
 {
     SDL_DestroyRenderer(_renderer);
     SDL_DestroyWindow(_window);
+
+    IMG_Quit();
+    TTF_Quit();
     SDL_Quit();
 }

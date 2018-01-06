@@ -19,5 +19,5 @@ int FrameTimer::framesPassed()
     auto currentFrame = (currentTime - _startTime) / _frameDuration;
     auto frameDiff = currentFrame - _lastFrame;
     _lastFrame = currentFrame;
-    return frameDiff;
+    return static_cast<int>(frameDiff);
 }

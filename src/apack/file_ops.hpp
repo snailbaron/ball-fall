@@ -14,5 +14,3 @@ struct FileInfo {
 void forEachFile(
     const std::string& rootDirectory,
     const std::function<void(const FileInfo&)>& action);
-
-std::vector<uint8_t> readFile(const std::string& filePath);
