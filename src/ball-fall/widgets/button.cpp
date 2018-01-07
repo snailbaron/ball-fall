@@ -1,23 +1,13 @@
-#include "widgets.hpp"
-#include "client.hpp"
+#include "button.hpp"
+#include "../client.hpp"
 
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_ttf.h>
-
-#include <algorithm>
 #include <utility>
 
-SolidBackground& SolidBackground::color(const Color& color)
-{
-    _color = color;
-    return *this;
-}
-
-void SolidBackground::render() const
-{
-    SDL_SetRenderDrawColor(renderer(), _color.r, _color.g, _color.b, _color.a);
-    SDL_RenderClear(renderer());
-}
+const std::map<Widget::VisualState, Color> Button::BgColorMap {
+    { VisualState::Normal,  Color(255, 255, 200) },
+    { VisualState::Focused, Color(200, 255, 180) },
+    { VisualState::Pressed, Color(250, 200, 100) },
+};
 
 Button& Button::position(int x, int y)
 {
@@ -44,6 +34,12 @@ Button& Button::text(std::string text)
     return *this;
 }
 
+Button& Button::action(std::function<void()> action)
+{
+    _action = std::move(action);
+    return *this;
+}
+
 void Button::render() const
 {
     SDL_SetRenderDrawColor(
@@ -52,7 +48,7 @@ void Button::render() const
     SDL_RenderFillRect(renderer(), &outerRect);
 
     SDL_SetRenderDrawColor(
-        renderer(), BgColor.r, BgColor.g, BgColor.b, BgColor.a);
+        renderer(), _bgColor.r, _bgColor.g, _bgColor.b, _bgColor.a);
     SDL_Rect innerRect {
         outerRect.x + BorderSize,
         outerRect.y + BorderSize,
@@ -69,6 +65,27 @@ void Button::render() const
     if (_texture) {
         SDL_RenderCopy(renderer(), _texture, nullptr, &dstRect);
     }
+}
+
+void Button::update(double /*delta*/)
+{
+}
+
+bool Button::contains(int x, int y)
+{
+    return x >= _position.x && x < _position.x + _size.x &&
+        y >= _position.y && y < _position.y + _size.y;
+}
+
+void Button::onVisualState(VisualState state)
+{
+    _bgColor = BgColorMap.at(state);
+    recalculateTexture();
+}
+
+void Button::onActivate()
+{
+    _action();
 }
 
 void Button::recalculateTexture()
@@ -93,7 +110,7 @@ void Button::recalculateTexture()
         font,
         _text.c_str(),
         SDL_Color{0, 0, 0, 255},
-        SDL_Color{BgColor.r, BgColor.g, BgColor.b, BgColor.a});
+        SDL_Color{_bgColor.r, _bgColor.g, _bgColor.b, _bgColor.a});
     if (surface) {
         _textureSize.x = surface->w;
         _textureSize.y = surface->h;

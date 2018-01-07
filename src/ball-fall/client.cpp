@@ -1,5 +1,5 @@
 #include "client.hpp"
-#include "widgets.hpp"
+#include "widgets/all.hpp"
 #include "config.hpp"
 #include "resources.hpp"
 
@@ -12,25 +12,57 @@
 void Client::init()
 {
     _resources.load(_context.renderer());
+    _widgetHolder.renderer(_context.renderer());
 
     SDL_ShowWindow(_context.window());
 
-    addWidget<SolidBackground>()
-        .color({0, 200, 100});
+    _widgetHolder.add<SolidBackground>()
+        .color({255, 240, 190});
 
-    addWidget<Button>()
+    _widgetHolder.add<Button>()
         .position(100, 100)
         .size(200, 100)
         .text("New Game");
+
+    _widgetHolder.add<Button>()
+        .position(100, 300)
+        .size(200, 100)
+        .text("Options");
+
+    _widgetHolder.add<Button>()
+        .position(100, 500)
+        .size(200, 100)
+        .text("Quit")
+        .action([this] {
+            _active = false;
+        });
+}
+
+void Client::processInput(const SDL_Event& event)
+{
+    if (event.type == SDL_QUIT) {
+        _active = false;
+        return;
+    }
+
+    _widgetHolder.processEvent(event);
+}
+
+void Client::update(double delta)
+{
+    _widgetHolder.update(delta);
 }
 
 void Client::render() const
 {
-    for (const auto& widget : _widgets) {
-        widget->render();
-    }
+    _widgetHolder.render();
 
     SDL_RenderPresent(_context.renderer());
+}
+
+bool Client::active() const
+{
+    return _active;
 }
 
 TTF_Font* Client::font(res::FontId fontId, int ptSize)
@@ -41,17 +73,6 @@ TTF_Font* Client::font(res::FontId fontId, int ptSize)
 const SDL_Texture* Client::texture(res::BitmapId bitmapId)
 {
     return _resources.texture(bitmapId);
-}
-
-template <class W>
-W& Client::addWidget()
-{
-    static_assert(
-        std::is_base_of<Widget, W>(),
-        "trying to add a non-subclass of Widget with Client::addWidget");
-
-    _widgets.push_back(std::make_unique<W>(_context.renderer()));
-    return *static_cast<W*>(_widgets.back().get());
 }
 
 Client& client()

@@ -17,8 +17,13 @@ add_executable (
         timer.hpp
         vector.hpp
         widget.hpp
-        widgets.cpp
-        widgets.hpp
+        widgets/all.hpp
+        widgets/button.cpp
+        widgets/button.hpp
+        widgets/holder.cpp
+        widgets/holder.hpp
+        widgets/solid_background.cpp
+        widgets/solid_background.hpp
 )
 
 add_custom_command (
