@@ -1,61 +1,104 @@
 #include "widgets.hpp"
-#include "resources.hpp"
 #include "client.hpp"
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 
 #include <algorithm>
+#include <utility>
 
-void SolidBackground::render(SDL_Renderer* renderer) const
+SolidBackground& SolidBackground::color(const Color& color)
 {
-    SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
-    SDL_RenderClear(renderer);
+    _color = color;
+    return *this;
 }
 
-void Button::render(SDL_Renderer* renderer) const
+void SolidBackground::render() const
 {
-    static constexpr auto BorderSize = 5;
-    static constexpr auto BorderColor = Color(100, 50, 50);
-    static constexpr auto BgColor = Color(150, 150, 100);
+    SDL_SetRenderDrawColor(renderer(), _color.r, _color.g, _color.b, _color.a);
+    SDL_RenderClear(renderer());
+}
+
+Button& Button::position(int x, int y)
+{
+    _position = {x, y};
+    return *this;
+}
+
+Button& Button::size(int width, int height)
+{
+    auto sizeVector = Vector<int>(width, height);
+    if (_size != sizeVector) {
+        _size = sizeVector;
+        recalculateTexture();
+    }
+    return *this;
+}
+
+Button& Button::text(std::string text)
+{
+    if (text != _text) {
+        _text = std::move(text);
+        recalculateTexture();
+    }
+    return *this;
+}
+
+void Button::render() const
+{
+    SDL_SetRenderDrawColor(
+        renderer(), BorderColor.r, BorderColor.g, BorderColor.b, BorderColor.a);
+    SDL_Rect outerRect {_position.x, _position.y, _size.x, _size.y};
+    SDL_RenderFillRect(renderer(), &outerRect);
 
     SDL_SetRenderDrawColor(
-        renderer, BorderColor.r, BorderColor.g, BorderColor.b, BorderColor.a);
-    SDL_Rect outerRect {position.x, position.y, size.x, size.y};
-    SDL_RenderFillRect(renderer, &outerRect);
-
-    SDL_SetRenderDrawColor(
-        renderer, BgColor.r, BgColor.g, BgColor.b, BgColor.a);
+        renderer(), BgColor.r, BgColor.g, BgColor.b, BgColor.a);
     SDL_Rect innerRect {
         outerRect.x + BorderSize,
         outerRect.y + BorderSize,
         outerRect.w - 2 * BorderSize,
         outerRect.h - 2 * BorderSize};
-    SDL_RenderFillRect(renderer, &innerRect);
+    SDL_RenderFillRect(renderer(), &innerRect);
 
-    int height = innerRect.h;
-    TTF_Font* font = client().font(res::FontId::MechaBold, height);
+    SDL_Rect dstRect {
+        innerRect.x + (innerRect.w - _textureSize.x) / 2,
+        innerRect.y + (innerRect.h - _textureSize.y) / 2,
+        _textureSize.x,
+        _textureSize.y};
+
+    if (_texture) {
+        SDL_RenderCopy(renderer(), _texture, nullptr, &dstRect);
+    }
+}
+
+void Button::recalculateTexture()
+{
+    if (_texture) {
+        SDL_DestroyTexture(_texture);
+        _texture = nullptr;
+    }
+
+    const int targetWidth = _size.x - 2 * BorderSize;
+
+    int height = _size.y - 2 * BorderSize;
+    TTF_Font* font = client().font(Font, height);
     int width;
-    TTF_SizeUTF8(font, text.c_str(), &width, nullptr);
-    while (width > innerRect.w) {
-        height = height * innerRect.w / width;
+    TTF_SizeUTF8(font, _text.c_str(), &width, nullptr);
+    while (width > targetWidth) {
+        height = height * targetWidth / width;
         font = client().font(res::FontId::Mecha, height);
-        TTF_SizeUTF8(font, text.c_str(), &width, nullptr);
+        TTF_SizeUTF8(font, _text.c_str(), &width, nullptr);
     }
     SDL_Surface* surface = TTF_RenderUTF8_Shaded(
         font,
-        text.c_str(),
+        _text.c_str(),
         SDL_Color{0, 0, 0, 255},
         SDL_Color{BgColor.r, BgColor.g, BgColor.b, BgColor.a});
-    SDL_Rect dstRect {
-        innerRect.x + (innerRect.w - surface->w) / 2,
-        innerRect.y + (innerRect.h - surface->h) / 2,
-        surface->w,
-        surface->h};
+    if (surface) {
+        _textureSize.x = surface->w;
+        _textureSize.y = surface->h;
 
-    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
-    SDL_FreeSurface(surface);
-
-    SDL_RenderCopy(renderer, texture, nullptr, &dstRect);
-    SDL_DestroyTexture(texture);
+        _texture = SDL_CreateTextureFromSurface(renderer(), surface);
+        SDL_FreeSurface(surface);
+    }
 }

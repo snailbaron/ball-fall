@@ -27,6 +27,7 @@ private:
 
     FontPtr loadFont(res::FontId fontId, int ptSize);
 
+
     std::vector<std::vector<uint8_t>> _fonts;
     MultiKeyLruCache<FontPtr, res::FontId, int> _sizedFonts;
     std::vector<TexturePtr> _textures;

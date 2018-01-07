@@ -4,7 +4,7 @@
 
 int main(int /*argc*/, char* /*argv*/[])
 {
-    client();
+    client().init();
 
     auto done = false;
     auto timer = FrameTimer(config::GameFps);

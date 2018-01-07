@@ -9,14 +9,15 @@
 
 class Client {
 public:
-    Client();
-
+    void init();
     void render() const;
 
     TTF_Font* font(res::FontId fontId, int ptSize);
     const SDL_Texture* texture(res::BitmapId bitmapId);
 
 private:
+    template <class W> W& addWidget();
+
     SdlContext _context;
     Resources _resources;
     std::vector<std::unique_ptr<Widget>> _widgets;

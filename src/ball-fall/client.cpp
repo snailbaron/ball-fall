@@ -7,28 +7,27 @@
 
 #include <stdexcept>
 #include <utility>
+#include <type_traits>
 
-Client::Client()
+void Client::init()
 {
     _resources.load(_context.renderer());
 
     SDL_ShowWindow(_context.window());
 
-    auto background = std::make_unique<SolidBackground>();
-    background->color = {0, 200, 100};
-    _widgets.push_back(std::move(background));
+    addWidget<SolidBackground>()
+        .color({0, 200, 100});
 
-    auto newGameButton = std::make_unique<Button>();
-    newGameButton->position = {100, 100};
-    newGameButton->size = {200, 100};
-    newGameButton->text = "New Game";
-    _widgets.push_back(std::move(newGameButton));
+    addWidget<Button>()
+        .position(100, 100)
+        .size(200, 100)
+        .text("New Game");
 }
 
 void Client::render() const
 {
     for (const auto& widget : _widgets) {
-        widget->render(_context.renderer());
+        widget->render();
     }
 
     SDL_RenderPresent(_context.renderer());
@@ -42,6 +41,17 @@ TTF_Font* Client::font(res::FontId fontId, int ptSize)
 const SDL_Texture* Client::texture(res::BitmapId bitmapId)
 {
     return _resources.texture(bitmapId);
+}
+
+template <class W>
+W& Client::addWidget()
+{
+    static_assert(
+        std::is_base_of<Widget, W>(),
+        "trying to add a non-subclass of Widget with Client::addWidget");
+
+    _widgets.push_back(std::make_unique<W>(_context.renderer()));
+    return *static_cast<W*>(_widgets.back().get());
 }
 
 Client& client()
