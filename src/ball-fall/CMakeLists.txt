@@ -27,7 +27,9 @@ add_custom_command (
         ${CMAKE_COMMAND} -E copy
             ${generated_dir}/resources.data
             resources.data
-    DEPENDS pack-resources
+    DEPENDS
+        pack-resources
+        ${generated_dir}/resources.data
 )
 
 target_link_libraries (ball-fall util)

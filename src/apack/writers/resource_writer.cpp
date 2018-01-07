@@ -10,9 +10,11 @@ ResourceWriter::ResourceWriter(const std::string& outputFile)
 ResourceWriter::~ResourceWriter()
 {
     auto fontVector = _builder.CreateVector(_fonts);
-    auto resources = flat::CreateResources(_builder, fontVector);
+    auto bitmapVector = _builder.CreateVector(_bitmaps);
 
-    _builder.Finish(resources);
+    auto resources = flat::CreateResources(_builder, fontVector, bitmapVector);
+
+    flat::FinishResourcesBuffer(_builder, resources);
 
     _outFile.write(
         reinterpret_cast<char*>(_builder.GetBufferPointer()),

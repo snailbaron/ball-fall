@@ -10,9 +10,9 @@
 
 Client::Client()
 {
-    SDL_ShowWindow(_context.window());
+    _resources.load(_context.renderer());
 
-    res::load("resources.data", _context.renderer());
+    SDL_ShowWindow(_context.window());
 
     auto background = std::make_unique<SolidBackground>();
     background->color = {0, 200, 100};
@@ -25,11 +25,27 @@ Client::Client()
     _widgets.push_back(std::move(newGameButton));
 }
 
-void Client::render()
+void Client::render() const
 {
     for (const auto& widget : _widgets) {
         widget->render(_context.renderer());
     }
 
     SDL_RenderPresent(_context.renderer());
+}
+
+TTF_Font* Client::font(res::FontId fontId, int ptSize)
+{
+    return _resources.font(fontId, ptSize);
+}
+
+const SDL_Texture* Client::texture(res::BitmapId bitmapId)
+{
+    return _resources.texture(bitmapId);
+}
+
+Client& client()
+{
+    static Client c;
+    return c;
 }

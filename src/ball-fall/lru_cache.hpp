@@ -56,6 +56,12 @@ public:
         return _pairsList.front().second;
     }
 
+    void clear()
+    {
+        _searchMap.clear();
+        _pairsList.clear();
+    }
+
 private:
     using PairsList = std::list<std::pair<Key, Value>>;
     using SearchMap = std::map<Key, typename PairsList::iterator>;
@@ -90,6 +96,11 @@ public:
     const Value& get(const Keys&... keys)
     {
         return _cache.get(std::make_tuple(keys...));
+    }
+
+    void clear()
+    {
+        _cache.clear();
     }
 
 private:

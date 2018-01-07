@@ -1,5 +1,6 @@
 #include "widgets.hpp"
 #include "resources.hpp"
+#include "client.hpp"
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
@@ -32,12 +33,14 @@ void Button::render(SDL_Renderer* renderer) const
         outerRect.h - 2 * BorderSize};
     SDL_RenderFillRect(renderer, &innerRect);
 
-    TTF_Font* font = res::font(res::FontId::MechaBold, innerRect.h);
-    int w;
-    TTF_SizeUTF8(font, text.c_str(), &w, nullptr);
-    if (w > innerRect.w) {
-        int fixedSize = innerRect.h * innerRect.w / w;
-        font = res::font(res::FontId::Mecha, fixedSize);
+    int height = innerRect.h;
+    TTF_Font* font = client().font(res::FontId::MechaBold, height);
+    int width;
+    TTF_SizeUTF8(font, text.c_str(), &width, nullptr);
+    while (width > innerRect.w) {
+        height = height * innerRect.w / width;
+        font = client().font(res::FontId::Mecha, height);
+        TTF_SizeUTF8(font, text.c_str(), &width, nullptr);
     }
     SDL_Surface* surface = TTF_RenderUTF8_Shaded(
         font,
@@ -52,9 +55,6 @@ void Button::render(SDL_Renderer* renderer) const
 
     SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
     SDL_FreeSurface(surface);
-
-
-
 
     SDL_RenderCopy(renderer, texture, nullptr, &dstRect);
     SDL_DestroyTexture(texture);

@@ -2,9 +2,9 @@
 #include "timer.hpp"
 #include "config.hpp"
 
-int main(int argc, char* argv[])
+int main(int /*argc*/, char* /*argv*/[])
 {
-    Client client;
+    client();
 
     auto done = false;
     auto timer = FrameTimer(config::GameFps);
@@ -20,7 +20,7 @@ int main(int argc, char* argv[])
 
         auto framesPassed = timer.framesPassed();
         if (framesPassed > 0) {
-            client.render();
+            client().render();
         }
     }
 
