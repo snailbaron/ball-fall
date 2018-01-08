@@ -6,6 +6,9 @@ find_library (SDL2_TTF_LIBRARY SDL2_ttf)
 find_path (SDL2_IMAGE_INCLUDE_DIR SDL2/SDL_image.h)
 find_library (SDL2_IMAGE_LIBRARY SDL2_image)
 
+find_path (SDL2_GFX_INCLUDE_DIR SDL2/SDL2_gfxPrimitives.h )
+find_library (SDL2_GFX_LIBRARY SDL2_gfx)
+
 find_path (FLATBUFFERS_INCLUDE_DIR flatbuffers/flatbuffers.h)
 find_library (FLATBUFFERS_LIBRARY flatbuffers)
 

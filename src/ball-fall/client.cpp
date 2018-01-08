@@ -1,7 +1,7 @@
 #include "client.hpp"
-#include "widgets/all.hpp"
 #include "config.hpp"
 #include "resources.hpp"
+#include "widgets/main_menu.hpp"
 
 #include <SDL2/SDL.h>
 
@@ -11,31 +11,15 @@
 
 void Client::init()
 {
+    subscribe<evt::Quit>(evt::bus(), [this] (const auto&) {
+        _active = false;
+    });
+
     _resources.load(_context.renderer());
-    _widgetHolder.renderer(_context.renderer());
+    _widgets.push_back(std::make_unique<MainMenu>(_context.renderer()));
 
+    render();
     SDL_ShowWindow(_context.window());
-
-    _widgetHolder.add<SolidBackground>()
-        .color({255, 240, 190});
-
-    _widgetHolder.add<Button>()
-        .position(100, 100)
-        .size(200, 100)
-        .text("New Game");
-
-    _widgetHolder.add<Button>()
-        .position(100, 300)
-        .size(200, 100)
-        .text("Options");
-
-    _widgetHolder.add<Button>()
-        .position(100, 500)
-        .size(200, 100)
-        .text("Quit")
-        .action([this] {
-            _active = false;
-        });
 }
 
 void Client::processInput(const SDL_Event& event)
@@ -45,18 +29,23 @@ void Client::processInput(const SDL_Event& event)
         return;
     }
 
-    _widgetHolder.processEvent(event);
+    for (auto& widget : _widgets) {
+        widget->processEvent(event);
+    }
 }
 
 void Client::update(double delta)
 {
-    _widgetHolder.update(delta);
+    for (auto& widget : _widgets) {
+        widget->update(delta);
+    }
 }
 
 void Client::render() const
 {
-    _widgetHolder.render();
-
+    for (const auto& widget : _widgets) {
+        widget->render();
+    }
     SDL_RenderPresent(_context.renderer());
 }
 

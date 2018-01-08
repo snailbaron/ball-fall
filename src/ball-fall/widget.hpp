@@ -1,5 +1,9 @@
 #pragma once
 
+#include "vector.hpp"
+
+#include <SDL2/SDL.h>
+
 struct SDL_Renderer;
 
 class Widget {
@@ -13,7 +17,11 @@ public:
     Widget(SDL_Renderer* renderer) : _renderer(renderer) {}
     virtual ~Widget() {}
 
-    virtual void render() const = 0;
+    virtual void position(int x, int y) { _position = {x, y}; }
+    virtual void size(int width, int height) { _size = {width, height}; }
+
+    virtual void processEvent(const SDL_Event& /*event*/) {}
+    virtual void render() const {}
     virtual void update(double /*delta*/) {}
 
     virtual bool contains(int /*x*/, int /*y*/) { return false; }
@@ -23,8 +31,9 @@ public:
 
 protected:
     SDL_Renderer* renderer() const { return _renderer; }
+    Vector<int> _position;
+    Vector<int> _size;
 
 private:
     SDL_Renderer* _renderer;
 };
-

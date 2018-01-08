@@ -4,13 +4,14 @@
 #include "resources.hpp"
 #include "widget.hpp"
 #include "widgets/holder.hpp"
+#include "events.hpp"
 
 #include <SDL2/SDL.h>
 
 #include <memory>
 #include <vector>
 
-class Client {
+class Client : evening::Subscriber {
 public:
     void init();
 
@@ -27,7 +28,7 @@ private:
     bool _active = true;
     SdlContext _context;
     Resources _resources;
-    WidgetHolder _widgetHolder;
+    std::vector<std::unique_ptr<Widget>> _widgets;
 };
 
 Client& client();

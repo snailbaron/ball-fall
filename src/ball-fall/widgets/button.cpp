@@ -9,20 +9,13 @@ const std::map<Widget::VisualState, Color> Button::BgColorMap {
     { VisualState::Pressed, Color(250, 200, 100) },
 };
 
-Button& Button::position(int x, int y)
-{
-    _position = {x, y};
-    return *this;
-}
-
-Button& Button::size(int width, int height)
+void Button::size(int width, int height)
 {
     auto sizeVector = Vector<int>(width, height);
     if (_size != sizeVector) {
         _size = sizeVector;
         recalculateTexture();
     }
-    return *this;
 }
 
 Button& Button::text(std::string text)

@@ -14,8 +14,7 @@ class Button : public Widget {
 public:
     using Widget::Widget;
 
-    Button& position(int x, int y);
-    Button& size(int width, int height);
+    void size(int width, int height) override;
     Button& text(std::string text);
     Button& action(std::function<void()> action);
 
@@ -34,8 +33,6 @@ private:
     static constexpr auto Font = res::FontId::Mecha;
     static const std::map<VisualState, Color> BgColorMap;
 
-    Vector<int> _position;
-    Vector<int> _size;
     std::string _text;
     std::function<void()> _action = []{};
 

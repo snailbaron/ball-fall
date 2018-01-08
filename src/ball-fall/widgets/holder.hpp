@@ -27,7 +27,7 @@ public:
     void update(double delta);
     void render() const;
 
-    template <class W> W& add()
+    template <class W> W& make()
     {
         static_assert(
             std::is_base_of<Widget, W>(),
@@ -35,6 +35,11 @@ public:
 
         _widgets.push_back(std::make_shared<W>(_renderer));
         return *static_cast<W*>(_widgets.back().get());
+    }
+
+    void add(std::unique_ptr<Widget>&& widget)
+    {
+        _widgets.push_back(std::move(widget));
     }
 
     void clear();

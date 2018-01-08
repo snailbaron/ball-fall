@@ -7,6 +7,9 @@ add_executable (
         color.cpp
         color.hpp
         config.hpp
+        evening.hpp
+        events.cpp
+        events.hpp
         lru_cache.hpp
         main.cpp
         resources.cpp
@@ -22,6 +25,10 @@ add_executable (
         widgets/button.hpp
         widgets/holder.cpp
         widgets/holder.hpp
+        widgets/main_menu.cpp
+        widgets/main_menu.hpp
+        widgets/panel.cpp
+        widgets/panel.hpp
         widgets/solid_background.cpp
         widgets/solid_background.hpp
 )
@@ -46,6 +53,9 @@ target_link_libraries (ball-fall ${SDL2_TTF_LIBRARY})
 
 target_include_directories (ball-fall PRIVATE ${SDL2_IMAGE_INCLUDE_DIR})
 target_link_libraries (ball-fall ${SDL2_IMAGE_LIBRARY})
+
+target_include_directories (ball-fall PRIVATE ${SDL2_GFX_INCLUDE_DIR})
+target_link_libraries (ball-fall ${SDL2_GFX_LIBRARY})
 
 target_include_directories (ball-fall PRIVATE ${generated_include_dir})
 
