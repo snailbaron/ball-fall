@@ -3,7 +3,7 @@
 #include "../widget.hpp"
 #include "../color.hpp"
 #include "../resources.hpp"
-#include "../vector.hpp"
+#include "../../vector.hpp"
 
 #include <SDL2/SDL.h>
 

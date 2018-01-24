@@ -3,17 +3,16 @@
 #include "sdl_context.hpp"
 #include "resources.hpp"
 #include "widget.hpp"
-#include "widgets/holder.hpp"
-#include "events.hpp"
+#include "../events.hpp"
 
 #include <SDL2/SDL.h>
 
 #include <memory>
 #include <vector>
 
-class Client : evening::Subscriber {
+class PlayerClient : public evening::Subscriber {
 public:
-    void init();
+    PlayerClient();
 
     void processInput(const SDL_Event& event);
     void update(double delta);
@@ -30,5 +29,3 @@ private:
     Resources _resources;
     std::vector<std::unique_ptr<Widget>> _widgets;
 };
-
-Client& client();

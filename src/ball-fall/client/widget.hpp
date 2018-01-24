@@ -1,6 +1,7 @@
 #pragma once
 
-#include "vector.hpp"
+#include "../vector.hpp"
+#include "resources.hpp"
 
 #include <SDL2/SDL.h>
 
@@ -14,7 +15,10 @@ public:
         Pressed,
     };
 
-    Widget(SDL_Renderer* renderer) : _renderer(renderer) {}
+    Widget(SDL_Renderer* renderer, Resources& resources)
+        : _renderer(renderer)
+        , _resources(resources)
+    { }
     virtual ~Widget() {}
 
     virtual void position(int x, int y) { _position = {x, y}; }
@@ -31,9 +35,11 @@ public:
 
 protected:
     SDL_Renderer* renderer() const { return _renderer; }
+    Resources& resources() const { return _resources; }
     Vector<int> _position;
     Vector<int> _size;
 
 private:
     SDL_Renderer* _renderer;
+    Resources& _resources;
 };

@@ -9,7 +9,7 @@
 
 class MainMenu : public Widget {
 public:
-    MainMenu(SDL_Renderer* renderer);
+    MainMenu(SDL_Renderer* renderer, Resources& resources);
 
     void processEvent(const SDL_Event& event) override;
     void render() const override;

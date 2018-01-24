@@ -1,5 +1,5 @@
 #include "resources.hpp"
-#include "config.hpp"
+#include "../config.hpp"
 
 #include <resources_generated.h>
 #include <util.hpp>
@@ -48,7 +48,7 @@ TTF_Font* Resources::font(res::FontId fontId, int ptSize)
     return _sizedFonts.get(fontId, ptSize).get();
 }
 
-const SDL_Texture* Resources::texture(res::BitmapId bitmapId)
+SDL_Texture* Resources::texture(res::BitmapId bitmapId)
 {
     return _textures.at(static_cast<size_t>(bitmapId)).get();
 }

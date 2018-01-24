@@ -1,5 +1,5 @@
 #include "sdl_context.hpp"
-#include "config.hpp"
+#include "../config.hpp"
 
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_image.h>

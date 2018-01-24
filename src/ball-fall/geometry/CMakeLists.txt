@@ -1,0 +1,10 @@
+target_sources(
+    ball-fall
+        PRIVATE
+            ${CMAKE_CURRENT_SOURCE_DIR}/2dspace.cpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/2dspace.hpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/geometry.cpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/geometry.hpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/collisions.cpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/collisions.hpp
+)

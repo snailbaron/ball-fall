@@ -1,5 +1,4 @@
 #include "solid_background.hpp"
-#include "../client.hpp"
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>

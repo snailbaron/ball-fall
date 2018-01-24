@@ -2,7 +2,7 @@
 
 #include "../widget.hpp"
 #include "../color.hpp"
-#include "../vector.hpp"
+#include "../../vector.hpp"
 #include "../resources.hpp"
 
 #include <cstdint>

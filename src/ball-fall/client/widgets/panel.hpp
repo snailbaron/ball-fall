@@ -2,7 +2,7 @@
 
 #include "../widget.hpp"
 #include "../color.hpp"
-#include "../vector.hpp"
+#include "../../vector.hpp"
 
 #include <vector>
 #include <memory>
@@ -22,7 +22,7 @@ public:
             std::is_base_of<Widget, W>(),
             "trying to add a non-subclass of Widget");
 
-        add(std::make_unique<W>(renderer()));
+        add(std::make_unique<W>(renderer(), resources()));
         return *static_cast<W*>(_widgets.back().get());
     }
 

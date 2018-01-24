@@ -1,5 +1,5 @@
 #include "button.hpp"
-#include "../client.hpp"
+#include "../player_client.hpp"
 
 #include <utility>
 
@@ -91,12 +91,12 @@ void Button::recalculateTexture()
     const int targetWidth = _size.x - 2 * BorderSize;
 
     int height = _size.y - 2 * BorderSize;
-    TTF_Font* font = client().font(Font, height);
+    TTF_Font* font = resources().font(Font, height);
     int width;
     TTF_SizeUTF8(font, _text.c_str(), &width, nullptr);
     while (width > targetWidth) {
         height = height * targetWidth / width;
-        font = client().font(res::FontId::Mecha, height);
+        font = resources().font(res::FontId::Mecha, height);
         TTF_SizeUTF8(font, _text.c_str(), &width, nullptr);
     }
     SDL_Surface* surface = TTF_RenderUTF8_Shaded(

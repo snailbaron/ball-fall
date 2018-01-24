@@ -1,12 +1,12 @@
 #include "main_menu.hpp"
 #include "button.hpp"
-#include "../events.hpp"
+#include "../../events.hpp"
 
-MainMenu::MainMenu(SDL_Renderer* renderer)
-    : Widget(renderer)
-    , _background(renderer)
-    , _mainPanel(renderer)
-    , _optionsPanel(renderer)
+MainMenu::MainMenu(SDL_Renderer* renderer, Resources& resources)
+    : Widget(renderer, resources)
+    , _background(renderer, resources)
+    , _mainPanel(renderer, resources)
+    , _optionsPanel(renderer, resources)
 {
     _mainPanel.position(100, 100);
     _mainPanel.size(800, 500);
@@ -15,7 +15,10 @@ MainMenu::MainMenu(SDL_Renderer* renderer)
     _optionsPanel.size(800, 500);
 
     _mainPanel.make<Button>()
-        .text("New Game");
+        .text("New Game")
+        .action([] {
+            evt::bus().makeSend<evt::NewGame>();
+        });
     _mainPanel.make<Button>()
         .text("Options")
         .action([this] {
