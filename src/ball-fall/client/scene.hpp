@@ -16,14 +16,11 @@ struct BrickSprite {
 
 class Scene : public evening::Subscriber {
 public:
-    Scene(SDL_Renderer* renderer, Resources& resources);
+    Scene();
 
     void render() const;
 
 private:
-    SDL_Renderer* _renderer;
-    Resources& _resources;
-
     std::map<Vector<int>, BrickSprite> _bricks;
     geometry::Vector _ballPosition;
     float _platformPosition;

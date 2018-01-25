@@ -1,12 +1,8 @@
 #include "main_menu.hpp"
-#include "button.hpp"
-#include "../../events.hpp"
+#include "widgets/button.hpp"
+#include "../events.hpp"
 
-MainMenu::MainMenu(SDL_Renderer* renderer, Resources& resources)
-    : Widget(renderer, resources)
-    , _background(renderer, resources)
-    , _mainPanel(renderer, resources)
-    , _optionsPanel(renderer, resources)
+MainMenu::MainMenu()
 {
     _mainPanel.position(100, 100);
     _mainPanel.size(800, 500);
@@ -52,6 +48,13 @@ void MainMenu::processEvent(const SDL_Event& event)
             _optionsPanel.processEvent(event);
             break;
     }
+}
+
+void MainMenu::update(double delta)
+{
+    _background.update(delta);
+    _mainPanel.update(delta);
+    _optionsPanel.update(delta);
 }
 
 void MainMenu::render() const

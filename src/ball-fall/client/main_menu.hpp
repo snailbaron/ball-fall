@@ -1,17 +1,18 @@
 #pragma once
 
-#include "../widget.hpp"
-#include "panel.hpp"
-#include "solid_background.hpp"
+#include "game_state.hpp"
+#include "widgets/panel.hpp"
+#include "widgets/solid_background.hpp"
 
 #include <vector>
 #include <memory>
 
-class MainMenu : public Widget {
+class MainMenu : public GameState {
 public:
-    MainMenu(SDL_Renderer* renderer, Resources& resources);
+    MainMenu();
 
     void processEvent(const SDL_Event& event) override;
+    void update(double delta) override;
     void render() const override;
 
 private:

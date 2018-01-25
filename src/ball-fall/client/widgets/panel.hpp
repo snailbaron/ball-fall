@@ -22,7 +22,7 @@ public:
             std::is_base_of<Widget, W>(),
             "trying to add a non-subclass of Widget");
 
-        add(std::make_unique<W>(renderer(), resources()));
+        add(std::make_unique<W>());
         return *static_cast<W*>(_widgets.back().get());
     }
 

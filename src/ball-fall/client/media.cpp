@@ -1,12 +1,22 @@
-#include "sdl_context.hpp"
+#include "media.hpp"
 #include "../config.hpp"
 
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_image.h>
 
 #include <stdexcept>
+#include <cassert>
 
-SdlContext::SdlContext()
+namespace media {
+
+namespace {
+
+SDL_Window* _window;
+SDL_Renderer* _renderer;
+
+} // namespace
+
+void init()
 {
     if (SDL_Init(SDL_INIT_VIDEO) == -1) {
         throw std::runtime_error("SDL_Init failed");
@@ -38,12 +48,29 @@ SdlContext::SdlContext()
     }
 }
 
-SdlContext::~SdlContext()
+void kill()
 {
     SDL_DestroyRenderer(_renderer);
+    _renderer = nullptr;
+
     SDL_DestroyWindow(_window);
+    _window = nullptr;
 
     IMG_Quit();
     TTF_Quit();
     SDL_Quit();
 }
+
+SDL_Window* window()
+{
+    assert(_window);
+    return _window;
+}
+
+SDL_Renderer* renderer()
+{
+    assert(_renderer);
+    return _renderer;
+}
+
+} // namespace media

@@ -1,5 +1,7 @@
 #include "button.hpp"
 #include "../player_client.hpp"
+#include "../media.hpp"
+#include "../resources.hpp"
 
 #include <utility>
 
@@ -36,18 +38,18 @@ Button& Button::action(std::function<void()> action)
 void Button::render() const
 {
     SDL_SetRenderDrawColor(
-        renderer(), BorderColor.r, BorderColor.g, BorderColor.b, BorderColor.a);
+        media::renderer(), BorderColor.r, BorderColor.g, BorderColor.b, BorderColor.a);
     SDL_Rect outerRect {_position.x, _position.y, _size.x, _size.y};
-    SDL_RenderFillRect(renderer(), &outerRect);
+    SDL_RenderFillRect(media::renderer(), &outerRect);
 
     SDL_SetRenderDrawColor(
-        renderer(), _bgColor.r, _bgColor.g, _bgColor.b, _bgColor.a);
+        media::renderer(), _bgColor.r, _bgColor.g, _bgColor.b, _bgColor.a);
     SDL_Rect innerRect {
         outerRect.x + BorderSize,
         outerRect.y + BorderSize,
         outerRect.w - 2 * BorderSize,
         outerRect.h - 2 * BorderSize};
-    SDL_RenderFillRect(renderer(), &innerRect);
+    SDL_RenderFillRect(media::renderer(), &innerRect);
 
     SDL_Rect dstRect {
         innerRect.x + (innerRect.w - _textureSize.x) / 2,
@@ -56,7 +58,7 @@ void Button::render() const
         _textureSize.y};
 
     if (_texture) {
-        SDL_RenderCopy(renderer(), _texture, nullptr, &dstRect);
+        SDL_RenderCopy(media::renderer(), _texture, nullptr, &dstRect);
     }
 }
 
@@ -91,12 +93,12 @@ void Button::recalculateTexture()
     const int targetWidth = _size.x - 2 * BorderSize;
 
     int height = _size.y - 2 * BorderSize;
-    TTF_Font* font = resources().font(Font, height);
+    TTF_Font* font = resources::font(Font, height);
     int width;
     TTF_SizeUTF8(font, _text.c_str(), &width, nullptr);
     while (width > targetWidth) {
         height = height * targetWidth / width;
-        font = resources().font(res::FontId::Mecha, height);
+        font = resources::font(res::FontId::Mecha, height);
         TTF_SizeUTF8(font, _text.c_str(), &width, nullptr);
     }
     SDL_Surface* surface = TTF_RenderUTF8_Shaded(
@@ -108,7 +110,7 @@ void Button::recalculateTexture()
         _textureSize.x = surface->w;
         _textureSize.y = surface->h;
 
-        _texture = SDL_CreateTextureFromSurface(renderer(), surface);
+        _texture = SDL_CreateTextureFromSurface(media::renderer(), surface);
         SDL_FreeSurface(surface);
     }
 }

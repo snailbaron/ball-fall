@@ -2,28 +2,6 @@ add_executable (
     ball-fall
         resources.data
 
-        client/color.cpp
-        client/color.hpp
-        client/lru_cache.hpp
-        client/player_client.cpp
-        client/player_client.hpp
-        client/resources.cpp
-        client/resources.cpp
-        client/scene.cpp
-        client/scene.hpp
-        client/sdl_context.cpp
-        client/sdl_context.hpp
-        client/widget.hpp
-        client/widgets/all.hpp
-        client/widgets/button.cpp
-        client/widgets/button.hpp
-        client/widgets/main_menu.cpp
-        client/widgets/main_menu.hpp
-        client/widgets/panel.cpp
-        client/widgets/panel.hpp
-        client/widgets/solid_background.cpp
-        client/widgets/solid_background.hpp
-
         config.hpp
         core.cpp
         core.hpp
@@ -39,6 +17,7 @@ add_executable (
 )
 
 add_subdirectory (geometry)
+add_subdirectory (client)
 
 add_custom_command (
     OUTPUT resources.data

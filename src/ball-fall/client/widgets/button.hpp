@@ -2,19 +2,21 @@
 
 #include "../widget.hpp"
 #include "../color.hpp"
-#include "../resources.hpp"
 #include "../../vector.hpp"
+
+#include <resource_ids.hpp>
 
 #include <SDL2/SDL.h>
 
 #include <string>
 #include <map>
+#include <functional>
 
 class Button : public Widget {
 public:
     using Widget::Widget;
 
-    void size(int width, int height) override;
+    void size(int width, int height);
     Button& text(std::string text);
     Button& action(std::function<void()> action);
 

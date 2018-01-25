@@ -1,8 +1,7 @@
 #include "scene.hpp"
+#include "media.hpp"
 
-Scene::Scene(SDL_Renderer* renderer, Resources& resources)
-    : _renderer(renderer)
-    , _resources(resources)
+Scene::Scene()
 {
     subscribe<evt::PlatformMove>(evt::bus(), [this] (const auto& event) {
         _platformPosition = static_cast<float>(event.position);
@@ -20,7 +19,11 @@ void Scene::render() const
             coords.y * 10,
             16,
             10};
-        SDL_RenderCopy(_renderer, _resources.texture(sprite.bitmapId), nullptr, &dstRect);
+        SDL_RenderCopy(
+            media::renderer(),
+            resources::texture(sprite.bitmapId),
+            nullptr,
+            &dstRect);
     }
 
     SDL_Rect dstRect {
@@ -29,5 +32,5 @@ void Scene::render() const
         32,
         32
     };
-    SDL_RenderCopy(_renderer, _resources.texture(res::BitmapId::Ball), nullptr, &dstRect);
+    SDL_RenderCopy(media::renderer(), resources::texture(res::BitmapId::Ball), nullptr, &dstRect);
 }

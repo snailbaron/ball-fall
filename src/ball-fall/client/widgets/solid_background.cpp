@@ -1,4 +1,5 @@
 #include "solid_background.hpp"
+#include "../media.hpp"
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
@@ -14,6 +15,6 @@ SolidBackground& SolidBackground::color(const Color& color)
 
 void SolidBackground::render() const
 {
-    SDL_SetRenderDrawColor(renderer(), _color.r, _color.g, _color.b, _color.a);
-    SDL_RenderClear(renderer());
+    SDL_SetRenderDrawColor(media::renderer(), _color.r, _color.g, _color.b, _color.a);
+    SDL_RenderClear(media::renderer());
 }

@@ -2,9 +2,14 @@
 #include "client/player_client.hpp"
 #include "timer.hpp"
 #include "config.hpp"
+#include "client/media.hpp"
+#include "client/resources.hpp"
 
 int main(int /*argc*/, char* /*argv*/[])
 {
+    media::init();
+    resources::load(media::renderer());
+
     Core core;
     PlayerClient client;
 
@@ -12,7 +17,7 @@ int main(int /*argc*/, char* /*argv*/[])
     while (client.active()) {
         SDL_Event event;
         while (SDL_PollEvent(&event)) {
-            client.processInput(event);
+            client.processEvent(event);
         }
 
         auto framesPassed = timer.framesPassed();
@@ -25,6 +30,9 @@ int main(int /*argc*/, char* /*argv*/[])
             client.render();
         }
     }
+
+    resources::clear();
+    media::kill();
 
     return 0;
 }

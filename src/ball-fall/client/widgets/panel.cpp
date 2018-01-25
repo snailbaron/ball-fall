@@ -1,4 +1,5 @@
 #include "panel.hpp"
+#include "../media.hpp"
 
 #include <SDL2/SDL2_gfxPrimitives.h>
 
@@ -65,7 +66,7 @@ void Panel::processEvent(const SDL_Event& event)
 void Panel::render() const
 {
     roundedBoxRGBA(
-        renderer(),
+        media::renderer(),
         static_cast<Sint16>(_position.x),
         static_cast<Sint16>(_position.y),
         static_cast<Sint16>(_position.x + _size.x),
@@ -83,7 +84,7 @@ void Panel::add(std::unique_ptr<Widget>&& widget)
     _widgets.push_back(std::move(widget));
 
     int freeSpace = _size.y - Offset * (static_cast<int>(_widgets.size()) + 1);
-    int rowHeight = freeSpace / _widgets.size();
+    int rowHeight = static_cast<int>(freeSpace / _widgets.size());
     int rowDiff = rowHeight + Offset;
     int offset = _position.y + Offset;
     for (const auto& wp : _widgets) {

@@ -1,7 +1,8 @@
 #include "player_client.hpp"
 #include "../config.hpp"
 #include "resources.hpp"
-#include "widgets/main_menu.hpp"
+#include "main_menu.hpp"
+#include "media.hpp"
 
 #include <SDL2/SDL.h>
 
@@ -15,51 +16,33 @@ PlayerClient::PlayerClient()
         _active = false;
     });
 
-    _resources.load(_context.renderer());
-    _widgets.push_back(std::make_unique<MainMenu>(_context.renderer(), _resources));
+    _gameState = std::make_unique<MainMenu>();
 
     render();
-    SDL_ShowWindow(_context.window());
+    SDL_ShowWindow(media::window());
 }
 
-void PlayerClient::processInput(const SDL_Event& event)
+void PlayerClient::processEvent(const SDL_Event& event)
 {
     if (event.type == SDL_QUIT) {
         _active = false;
         return;
     }
-
-    for (auto& widget : _widgets) {
-        widget->processEvent(event);
-    }
+    _gameState->processEvent(event);
 }
 
 void PlayerClient::update(double delta)
 {
-    for (auto& widget : _widgets) {
-        widget->update(delta);
-    }
+    _gameState->update(delta);
 }
 
 void PlayerClient::render() const
 {
-    for (const auto& widget : _widgets) {
-        widget->render();
-    }
-    SDL_RenderPresent(_context.renderer());
+    _gameState->render();
+    SDL_RenderPresent(media::renderer());
 }
 
 bool PlayerClient::active() const
 {
     return _active;
-}
-
-TTF_Font* PlayerClient::font(res::FontId fontId, int ptSize)
-{
-    return _resources.font(fontId, ptSize);
-}
-
-const SDL_Texture* PlayerClient::texture(res::BitmapId bitmapId)
-{
-    return _resources.texture(bitmapId);
 }
