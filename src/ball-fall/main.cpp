@@ -4,6 +4,7 @@
 #include "config.hpp"
 #include "client/media.hpp"
 #include "client/resources.hpp"
+#include "events.hpp"
 
 int main(int /*argc*/, char* /*argv*/[])
 {
@@ -25,6 +26,7 @@ int main(int /*argc*/, char* /*argv*/[])
             for (int i = 0; i < framesPassed; i++) {
                 core.update(timer.delta());
                 client.update(timer.delta());
+                evt::bus().deliver();
             }
 
             client.render();

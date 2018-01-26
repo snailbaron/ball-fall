@@ -1,8 +1,8 @@
 #pragma once
 
-#include "resources.hpp"
-#include "../vector.hpp"
-#include "../events.hpp"
+#include "../resources.hpp"
+#include "../../vector.hpp"
+#include "../../events.hpp"
 
 #include <SDL2/SDL.h>
 
@@ -12,6 +12,10 @@ struct BrickSprite {
     res::BitmapId bitmapId;
     int x;
     int y;
+};
+
+struct PlatformSprite {
+    void render() const;
 };
 
 class Scene : public evening::Subscriber {

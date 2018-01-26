@@ -1,5 +1,5 @@
 #include "panel.hpp"
-#include "../media.hpp"
+#include "../../media.hpp"
 
 #include <SDL2/SDL2_gfxPrimitives.h>
 

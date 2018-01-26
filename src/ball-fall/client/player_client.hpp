@@ -1,6 +1,6 @@
 #pragma once
 
-#include "game_state.hpp"
+#include "game_states/game_state.hpp"
 #include "../events.hpp"
 
 #include <SDL2/SDL.h>

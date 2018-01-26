@@ -23,6 +23,7 @@ include_directories (${generated_include_dir})
 
 add_subdirectory (flat)
 add_subdirectory (util)
+add_subdirectory (evening)
 
 add_subdirectory (apack)
 add_dependencies (apack flat-headers)

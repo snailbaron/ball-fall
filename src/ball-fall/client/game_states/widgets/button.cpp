@@ -1,7 +1,6 @@
 #include "button.hpp"
-#include "../player_client.hpp"
-#include "../media.hpp"
-#include "../resources.hpp"
+#include "../../media.hpp"
+#include "../../resources.hpp"
 
 #include <utility>
 

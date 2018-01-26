@@ -5,7 +5,6 @@ add_executable (
         config.hpp
         core.cpp
         core.hpp
-        evening.hpp
         events.cpp
         events.hpp
         field.cpp
@@ -31,7 +30,7 @@ add_custom_command (
 )
 
 target_link_libraries (ball-fall util)
-
+target_link_libraries (ball-fall evening)
 target_link_libraries (ball-fall SDL2::SDL2 SDL2::SDL2main)
 
 target_include_directories (ball-fall PRIVATE ${SDL2_TTF_INCLUDE_DIR})

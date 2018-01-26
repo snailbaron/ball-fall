@@ -2,9 +2,9 @@
 
 Core::Core()
 {
-    subscribe<evt::NewGame>(evt::bus(), [this] (const auto&) {
-        _field = Field();
-    });
+    //subscribe<evt::NewGame>(evt::bus(), [this] (const auto&) {
+    //    _field = Field();
+    //});
 }
 
 void Core::update(double delta)

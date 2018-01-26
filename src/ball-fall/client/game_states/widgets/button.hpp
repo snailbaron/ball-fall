@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../widget.hpp"
-#include "../color.hpp"
-#include "../../vector.hpp"
+#include "widget.hpp"
+#include "color.hpp"
+#include "../../../vector.hpp"
 
 #include <resource_ids.hpp>
 

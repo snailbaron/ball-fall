@@ -1,0 +1,3 @@
+[submodule "src/evening"]
+	path = src/evening
+	url = git@github.com:snailbaron/evening.git

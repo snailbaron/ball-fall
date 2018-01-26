@@ -1,5 +1,9 @@
 #include "scene.hpp"
-#include "media.hpp"
+#include "../media.hpp"
+
+void PlatformSprite::render() const
+{
+}
 
 Scene::Scene()
 {
@@ -27,8 +31,8 @@ void Scene::render() const
     }
 
     SDL_Rect dstRect {
-        _ballPosition.x * 10,
-        _ballPosition.y * 10,
+        static_cast<int>(_ballPosition.x * 10),
+        static_cast<int>(_ballPosition.y * 10),
         32,
         32
     };

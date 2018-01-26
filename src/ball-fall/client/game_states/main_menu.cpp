@@ -1,6 +1,6 @@
 #include "main_menu.hpp"
 #include "widgets/button.hpp"
-#include "../events.hpp"
+#include "../../events.hpp"
 
 MainMenu::MainMenu()
 {
@@ -13,7 +13,7 @@ MainMenu::MainMenu()
     _mainPanel.make<Button>()
         .text("New Game")
         .action([] {
-            evt::bus().makeSend<evt::NewGame>();
+            evt::bus().makePush<evt::NewGame>();
         });
     _mainPanel.make<Button>()
         .text("Options")
@@ -23,7 +23,7 @@ MainMenu::MainMenu()
     _mainPanel.make<Button>()
         .text("Quit")
         .action([] {
-            evt::bus().makeSend<evt::Quit>();
+            evt::bus().makePush<evt::Quit>();
         });
 
     _optionsPanel.make<Button>()

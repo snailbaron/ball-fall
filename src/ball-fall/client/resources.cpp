@@ -31,9 +31,6 @@ public:
         auto resourceData = util::readFile(config::ResourceFile);
         const auto* resources = flat::GetResources(resourceData.data());
 
-        auto len = resources->fonts()->Length();
-        auto p0 = resources->fonts()->Get(0);
-        auto p1 = resources->fonts()->Get(1);
         for (const auto& font : *resources->fonts()) {
             _fonts.emplace_back(
                 font->data()->data(),

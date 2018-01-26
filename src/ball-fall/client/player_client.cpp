@@ -1,7 +1,8 @@
 #include "player_client.hpp"
 #include "../config.hpp"
 #include "resources.hpp"
-#include "main_menu.hpp"
+#include "game_states/main_menu.hpp"
+#include "game_states/gameplay.hpp"
 #include "media.hpp"
 
 #include <SDL2/SDL.h>
@@ -14,6 +15,9 @@ PlayerClient::PlayerClient()
 {
     subscribe<evt::Quit>(evt::bus(), [this] (const auto&) {
         _active = false;
+    });
+    subscribe<evt::NewGame>(evt::bus(), [this] (const auto&) {
+        _gameState = std::make_unique<Gameplay>();
     });
 
     _gameState = std::make_unique<MainMenu>();
@@ -38,7 +42,11 @@ void PlayerClient::update(double delta)
 
 void PlayerClient::render() const
 {
+    SDL_SetRenderDrawColor(media::renderer(), 0, 0, 0, 255);
+    SDL_RenderClear(media::renderer());
+
     _gameState->render();
+
     SDL_RenderPresent(media::renderer());
 }
 
