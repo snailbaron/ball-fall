@@ -1,6 +1,7 @@
 #pragma once
 
 #include <utility>
+#include <type_traits>
 
 template <class T>
 struct Vector {
@@ -15,6 +16,12 @@ struct Vector {
     T x;
     T y;
 };
+
+template <class Target, class Source>
+Vector<Target> vectorCast(const Vector<Source>& source)
+{
+    return {static_cast<Target>(source.x), static_cast<Target>(source.y)};
+}
 
 template <class T>
 bool operator==(const Vector<T>& left, const Vector<T>& right)

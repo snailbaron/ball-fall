@@ -1,15 +1,12 @@
-#include "core.hpp"
-#include "client/player_client.hpp"
-#include "timer.hpp"
-#include "config.hpp"
-#include "client/media.hpp"
-#include "client/resources.hpp"
-#include "events.hpp"
+#include <core.hpp>
+#include <client/player_client.hpp>
+#include <util/timer.hpp>
+#include <client/config.hpp>
+#include <platform.hpp>
 
 int main(int /*argc*/, char* /*argv*/[])
 {
-    media::init();
-    resources::load(media::renderer());
+    platform::init();
 
     Core core;
     PlayerClient client;
@@ -33,8 +30,7 @@ int main(int /*argc*/, char* /*argv*/[])
         }
     }
 
-    resources::clear();
-    media::kill();
+    platform::kill();
 
     return 0;
 }

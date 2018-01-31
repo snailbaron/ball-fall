@@ -1,8 +1,9 @@
 #pragma once
 
 #include "widget.hpp"
-#include "color.hpp"
-#include "../../../vector.hpp"
+
+#include <util/vector.hpp>
+#include <platform/color.hpp>
 
 #include <vector>
 #include <memory>

@@ -1,7 +1,5 @@
 #include "panel.hpp"
-#include "../../media.hpp"
-
-#include <SDL2/SDL2_gfxPrimitives.h>
+#include <platform.hpp>
 
 void Panel::processEvent(const SDL_Event& event)
 {
@@ -65,14 +63,11 @@ void Panel::processEvent(const SDL_Event& event)
 
 void Panel::render() const
 {
-    roundedBoxRGBA(
-        media::renderer(),
-        static_cast<Sint16>(_position.x),
-        static_cast<Sint16>(_position.y),
-        static_cast<Sint16>(_position.x + _size.x),
-        static_cast<Sint16>(_position.y + _size.y),
+    platform::screen().drawRoundedBox(
+        vectorCast<int16_t>(_position),
+        vectorCast<int16_t>(_size),
         CornerRadius,
-        BgColor.r, BgColor.g, BgColor.b, BgColor.a);
+        BgColor);
 
     for (const auto& widget : _widgets) {
         widget->render();

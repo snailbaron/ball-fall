@@ -1,4 +1,4 @@
-#include "timer.hpp"
+#include <util/timer.hpp>
 
 FrameTimer::FrameTimer(int fps)
     : _lastFrame(0)

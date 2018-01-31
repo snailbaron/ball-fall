@@ -4,7 +4,7 @@
  * Geometry primitives
  */
 
-#include "2dspace.hpp"
+#include <geometry/2dspace.hpp>
 
 #include <vector>
 #include <utility>

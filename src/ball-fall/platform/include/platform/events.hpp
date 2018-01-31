@@ -18,5 +18,6 @@ struct PlatformMove
 };
 
 evening::Channel& bus();
+evening::Channel& input();
 
 } // namespace evt

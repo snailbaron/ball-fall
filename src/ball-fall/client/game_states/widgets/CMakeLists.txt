@@ -1,6 +1,5 @@
 set (sources
     button.cpp
-    color.cpp
     panel.cpp
     solid_background.cpp
 )

@@ -15,6 +15,5 @@ SolidBackground& SolidBackground::color(const Color& color)
 
 void SolidBackground::render() const
 {
-    SDL_SetRenderDrawColor(media::renderer(), _color.r, _color.g, _color.b, _color.a);
-    SDL_RenderClear(media::renderer());
+    media::screen().clear(_color);
 }

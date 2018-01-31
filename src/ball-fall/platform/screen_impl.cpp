@@ -1,35 +1,18 @@
-#include "media.hpp"
-#include "../config.hpp"
+#include "screen_impl.hpp"
+
+#include <client/config.hpp>
 
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL2_gfxPrimitives.h>
 
 #include <stdexcept>
 #include <cassert>
 
-namespace media {
+namespace platform {
 
-namespace {
-
-SDL_Window* _window;
-SDL_Renderer* _renderer;
-
-} // namespace
-
-void init()
+ScreenImpl::ScreenImpl()
 {
-    if (SDL_Init(SDL_INIT_VIDEO) == -1) {
-        throw std::runtime_error("SDL_Init failed");
-    }
-
-    if (TTF_Init() == -1) {
-        throw std::runtime_error("TTF_Init failed");
-    }
-
-    if (IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG) == -1) {
-        throw std::runtime_error("IMG_Init failed");
-    }
-
     _window = SDL_CreateWindow(
         config::WindowTitle,
         SDL_WINDOWPOS_UNDEFINED,
@@ -48,29 +31,33 @@ void init()
     }
 }
 
-void kill()
+ScreenImpl::~ScreenImpl()
 {
     SDL_DestroyRenderer(_renderer);
     _renderer = nullptr;
 
     SDL_DestroyWindow(_window);
     _window = nullptr;
-
-    IMG_Quit();
-    TTF_Quit();
-    SDL_Quit();
 }
 
-SDL_Window* window()
+void ScreenImpl::clear(const Color& color)
 {
-    assert(_window);
-    return _window;
+    SDL_SetRenderDrawColor(_renderer, color.r, color.g, color.b, color.a);
+    SDL_RenderClear(_renderer);
 }
 
-SDL_Renderer* renderer()
+void ScreenImpl::drawRoundedBox(
+    const Vector<int16_t>& position,
+    const Vector<int16_t>& size,
+    int16_t cornerRadius,
+    const Color& color)
 {
-    assert(_renderer);
-    return _renderer;
+    int result = roundedBoxRGBA(
+        _renderer,
+        position.x, position.y, position.x + size.x, position.y + size.y,
+        cornerRadius,
+        color.r, color.g, color.b, color.a);
+    assert(result == 0);
 }
 
-} // namespace media
+} // namespace platform

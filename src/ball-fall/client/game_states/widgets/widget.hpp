@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../../../vector.hpp"
-#include "../../resources.hpp"
+#include <util/vector.hpp>
+#include <platform/resources.hpp>
 
 #include <SDL2/SDL.h>
 

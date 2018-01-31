@@ -1,22 +1,30 @@
 add_executable (
     ball-fall
         resources.data
-
-        config.hpp
-        core.cpp
-        core.hpp
-        events.cpp
-        events.hpp
-        field.cpp
-        field.hpp
         main.cpp
-        timer.cpp
-        timer.hpp
-        vector.hpp
 )
 
-add_subdirectory (geometry)
+macro (MODULE)
+    set (options "")
+    set (oneValueArgs NAME)
+    set (multiValueArgs SOURCES)
+    cmake_parse_arguments (
+        MODULE "${options}" "${oneValueArgs}" "${multiValueArgs}" "${ARGN}")
+
+    message (STATUS "adding include directory: ${CMAKE_CURRENT_SOURCE_DIR}/include")
+    target_include_directories (ball-fall PRIVATE include)
+
+    set (sources ${MODULE_SOURCES})
+    string (REGEX REPLACE "([^;]+)" "${CMAKE_CURRENT_SOURCE_DIR}/\\1" sources "${sources}")
+
+    target_sources (ball-fall PRIVATE ${sources})
+endmacro ()
+
+add_subdirectory (util)
 add_subdirectory (client)
+add_subdirectory (core)
+add_subdirectory (geometry)
+add_subdirectory (platform)
 
 add_custom_command (
     OUTPUT resources.data

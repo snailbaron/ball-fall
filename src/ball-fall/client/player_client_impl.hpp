@@ -1,7 +1,8 @@
 #pragma once
 
 #include "game_states/game_state.hpp"
-#include "../events.hpp"
+#include <player_client.hpp>
+#include <platform/events.hpp>
 
 #include <SDL2/SDL.h>
 

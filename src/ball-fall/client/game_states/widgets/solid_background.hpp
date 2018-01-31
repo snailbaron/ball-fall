@@ -1,9 +1,9 @@
 #pragma once
 
 #include "widget.hpp"
-#include "color.hpp"
-#include "../../../vector.hpp"
-#include "../../resources.hpp"
+#include <platform/color.hpp>
+#include <util/vector.hpp>
+#include <platform/resources.hpp>
 
 #include <cstdint>
 #include <string>

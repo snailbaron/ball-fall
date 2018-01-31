@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../resources.hpp"
-#include "../../vector.hpp"
-#include "../../events.hpp"
+#include <platform/resources.hpp>
+#include <util/vector.hpp>
+#include <platform/events.hpp>
 
 #include <SDL2/SDL.h>
 
