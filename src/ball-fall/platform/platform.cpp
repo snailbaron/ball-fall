@@ -49,4 +49,16 @@ void kill()
     SDL_Quit();
 }
 
+Screen& screen()
+{
+    assert(g_screen);
+    return *g_screen;
+}
+
+Resources& resources()
+{
+    assert(g_resources);
+    return *g_resources;
+}
+
 } // namespace platform

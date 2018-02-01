@@ -1,11 +1,13 @@
 #pragma once
 
+#include <platform/visuals.hpp>
+
 #include <resource_ids.hpp>
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 
-namespace platform {
+#include <memory>
 
 class Resources {
 public:
@@ -15,7 +17,5 @@ public:
     virtual void clear() = 0;
 
     virtual TTF_Font* Resources::font(res::FontId fontId, int ptSize) = 0;
-    virtual SDL_Texture* Resources::texture(res::BitmapId bitmapId) = 0;
+    virtual const Texture& Resources::texture(res::BitmapId bitmapId) = 0;
 };
-
-} // namespace platform

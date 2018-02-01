@@ -1,9 +1,8 @@
 #pragma once
 
 #include "widget.hpp"
-#include <platform/color.hpp>
 #include <util/vector.hpp>
-#include <platform/resources.hpp>
+#include <platform.hpp>
 
 #include <cstdint>
 #include <string>

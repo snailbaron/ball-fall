@@ -3,7 +3,7 @@
 #include "widget.hpp"
 
 #include <util/vector.hpp>
-#include <platform/color.hpp>
+#include <platform.hpp>
 
 #include <vector>
 #include <memory>

@@ -3,11 +3,9 @@
 #include "widget.hpp"
 
 #include <util/vector.hpp>
-#include <platform/color.hpp>
+#include <platform.hpp>
 
 #include <resource_ids.hpp>
-
-#include <SDL2/SDL.h>
 
 #include <string>
 #include <map>
@@ -39,7 +37,6 @@ private:
     std::string _text;
     std::function<void()> _action = []{};
 
-    SDL_Texture* _texture = nullptr;
-    Vector<int> _textureSize;
+    Texture _texture;
     Color _bgColor = BgColorMap.at(VisualState::Normal);
 };

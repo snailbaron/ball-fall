@@ -1,32 +1,34 @@
 #include <core.hpp>
-#include <client/player_client.hpp>
 #include <util/timer.hpp>
-#include <client/config.hpp>
+#include <config.hpp>
+#include <client/client.hpp>
 #include <platform.hpp>
+
+#include <SDL2/SDL.h>
 
 int main(int /*argc*/, char* /*argv*/[])
 {
     platform::init();
 
-    Core core;
-    PlayerClient client;
+    auto core = makeCore();
+    auto client = makePlayerClient();
 
     auto timer = FrameTimer(config::GameFps);
-    while (client.active()) {
+    while (client->active()) {
         SDL_Event event;
         while (SDL_PollEvent(&event)) {
-            client.processEvent(event);
+            evt::input().send(event);
         }
 
         auto framesPassed = timer.framesPassed();
         if (framesPassed > 0) {
             for (int i = 0; i < framesPassed; i++) {
-                core.update(timer.delta());
-                client.update(timer.delta());
+                core->update(timer.delta());
+                client->update(timer.delta());
                 evt::bus().deliver();
             }
 
-            client.render();
+            client->render();
         }
     }
 

@@ -1,6 +1,6 @@
 #include "main_menu.hpp"
 #include "widgets/button.hpp"
-#include "../../events.hpp"
+#include <platform.hpp>
 
 MainMenu::MainMenu()
 {

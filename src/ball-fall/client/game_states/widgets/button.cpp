@@ -1,6 +1,8 @@
 #include "button.hpp"
-#include "../../media.hpp"
-#include "../../resources.hpp"
+#include <platform.hpp>
+
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 
 #include <utility>
 
@@ -36,29 +38,14 @@ Button& Button::action(std::function<void()> action)
 
 void Button::render() const
 {
-    SDL_SetRenderDrawColor(
-        media::renderer(), BorderColor.r, BorderColor.g, BorderColor.b, BorderColor.a);
-    SDL_Rect outerRect {_position.x, _position.y, _size.x, _size.y};
-    SDL_RenderFillRect(media::renderer(), &outerRect);
-
-    SDL_SetRenderDrawColor(
-        media::renderer(), _bgColor.r, _bgColor.g, _bgColor.b, _bgColor.a);
-    SDL_Rect innerRect {
-        outerRect.x + BorderSize,
-        outerRect.y + BorderSize,
-        outerRect.w - 2 * BorderSize,
-        outerRect.h - 2 * BorderSize};
-    SDL_RenderFillRect(media::renderer(), &innerRect);
-
-    SDL_Rect dstRect {
-        innerRect.x + (innerRect.w - _textureSize.x) / 2,
-        innerRect.y + (innerRect.h - _textureSize.y) / 2,
-        _textureSize.x,
-        _textureSize.y};
-
-    if (_texture) {
-        SDL_RenderCopy(media::renderer(), _texture, nullptr, &dstRect);
-    }
+    platform::screen().drawRect(_position, _size, BorderColor);
+    platform::screen().drawRect(
+        _position + Vector<int>{BorderSize, BorderSize},
+        _size - Vector<int>{2 * BorderSize, 2 * BorderSize},
+        _bgColor);
+    platform::screen().drawTexture(
+        _position + Vector<int>{2 * BorderSize, 2 * BorderSize},
+        _texture);
 }
 
 void Button::update(double /*delta*/)
@@ -84,32 +71,10 @@ void Button::onActivate()
 
 void Button::recalculateTexture()
 {
-    if (_texture) {
-        SDL_DestroyTexture(_texture);
-        _texture = nullptr;
-    }
-
-    const int targetWidth = _size.x - 2 * BorderSize;
-
-    int height = _size.y - 2 * BorderSize;
-    TTF_Font* font = resources::font(Font, height);
-    int width;
-    TTF_SizeUTF8(font, _text.c_str(), &width, nullptr);
-    while (width > targetWidth) {
-        height = height * targetWidth / width;
-        font = resources::font(res::FontId::Mecha, height);
-        TTF_SizeUTF8(font, _text.c_str(), &width, nullptr);
-    }
-    SDL_Surface* surface = TTF_RenderUTF8_Shaded(
-        font,
-        _text.c_str(),
-        SDL_Color{0, 0, 0, 255},
-        SDL_Color{_bgColor.r, _bgColor.g, _bgColor.b, _bgColor.a});
-    if (surface) {
-        _textureSize.x = surface->w;
-        _textureSize.y = surface->h;
-
-        _texture = SDL_CreateTextureFromSurface(media::renderer(), surface);
-        SDL_FreeSurface(surface);
-    }
+    _texture = platform::screen().textTexture(
+        _text,
+        Font,
+        Color{0, 0, 0},
+        _bgColor,
+        {_size.x - 2 * BorderSize, _size.y - 2 * BorderSize});
 }

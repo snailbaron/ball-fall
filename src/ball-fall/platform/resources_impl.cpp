@@ -1,110 +1,76 @@
+#pragma once
+
 #include "resources_impl.hpp"
 #include "lru_cache.hpp"
-#include "util.hpp"
-#include "../config.hpp"
+#include "screen_impl.hpp"
 
-#include <resources_generated.h>
+#include <platform.hpp>
 
+#include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
-#include <memory>
-#include <cassert>
-
-namespace resources {
+#include <util.hpp>
+#include <config.hpp>
 
 namespace flat = BallFall::Resources;
 
-namespace {
+ResourcesImpl::ResourcesImpl()
+    : _sizedFonts(
+        20,
+        [this] (res::FontId fontId, int ptSize) {
+            return loadFont(fontId, ptSize);
+        })
+{ }
 
-class Resources {
-public:
-    Resources()
-        : _sizedFonts(
-            20,
-            [this] (res::FontId fontId, int ptSize) {
-                return loadFont(fontId, ptSize);
-            })
-    { }
+void ResourcesImpl::load()
+{
+    auto resourceData = util::readFile(config::ResourceFile);
+    const auto* resources = flat::GetResources(resourceData.data());
 
-    void load(SDL_Renderer* renderer)
-    {
-        auto resourceData = util::readFile(config::ResourceFile);
-        const auto* resources = flat::GetResources(resourceData.data());
-
-        for (const auto& font : *resources->fonts()) {
-            _fonts.emplace_back(
-                font->data()->data(),
-                font->data()->data() + font->data()->size());
-        }
-
-        for (const auto& bitmap : *resources->bitmaps()) {
-            SDL_Surface* surface =
-                IMG_Load_RW(
-                    SDL_RWFromConstMem(
-                        bitmap->data()->data(), bitmap->data()->size()), 0);
-            SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
-            SDL_FreeSurface(surface);
-            _textures.push_back(
-                std::unique_ptr<SDL_Texture, void(*)(SDL_Texture*)>(
-                    texture, SDL_DestroyTexture));
-        }
+    for (const auto& font : *resources->fonts()) {
+        _fonts.emplace_back(
+            font->data()->data(),
+            font->data()->data() + font->data()->size());
     }
 
-    TTF_Font* Resources::font(res::FontId fontId, int ptSize)
-    {
-        return _sizedFonts.get(fontId, ptSize).get();
+    for (const auto& bitmap : *resources->bitmaps()) {
+        SDL_Surface* surface =
+            IMG_Load_RW(
+                SDL_RWFromConstMem(
+                    bitmap->data()->data(), bitmap->data()->size()), 0);
+
+        auto& screenImpl = dynamic_cast<ScreenImpl&>(platform::screen());
+
+        SDL_Texture* texture = SDL_CreateTextureFromSurface(screenImpl.renderer(), surface);
+        int width = surface->w;
+        int height = surface->h;
+        SDL_FreeSurface(surface);
+        _textures.emplace_back(width, height, texture);
     }
-
-    SDL_Texture* Resources::texture(res::BitmapId bitmapId)
-    {
-        return _textures.at(static_cast<size_t>(bitmapId)).get();
-    }
-
-private:
-    using TexturePtr = std::unique_ptr<SDL_Texture, void(*)(SDL_Texture*)>;
-    using FontPtr = std::unique_ptr<TTF_Font, void(*)(TTF_Font*)>;
-
-    Resources::FontPtr Resources::loadFont(res::FontId fontId, int ptSize)
-    {
-        auto index = static_cast<size_t>(fontId);
-        const auto& fontData = _fonts.at(index);
-        TTF_Font* rawPtr = TTF_OpenFontRW(
-            SDL_RWFromConstMem(fontData.data(), (int)fontData.size()), 0, ptSize);
-        return {rawPtr, TTF_CloseFont};
-    }
-
-    std::vector<std::vector<uint8_t>> _fonts;
-    MultiKeyLruCache<FontPtr, res::FontId, int> _sizedFonts;
-    std::vector<TexturePtr> _textures;
-};
-
-std::unique_ptr<Resources> resources;
-
-} // namespace
-
-void load(SDL_Renderer* renderer)
-{
-    assert(!resources);
-    resources = std::make_unique<Resources>();
-    resources->load(renderer);
 }
 
-void clear()
+void ResourcesImpl::clear()
 {
-    assert(resources);
-    resources.reset();
+    _sizedFonts.clear();
+    _fonts.clear();
+    _textures.clear();
 }
 
-TTF_Font* font(res::FontId fontId, int ptSize)
+TTF_Font* ResourcesImpl::font(res::FontId fontId, int ptSize)
 {
-    assert(resources);
-    return resources->font(fontId, ptSize);
+    return _sizedFonts.get(fontId, ptSize).get();
 }
 
-SDL_Texture* texture(res::BitmapId bitmapId)
+const Texture& ResourcesImpl::texture(res::BitmapId bitmapId)
 {
-    assert(resources);
-    return resources->texture(bitmapId);
+    return _textures.at(static_cast<size_t>(bitmapId));
 }
 
-} // namespace resources
+ResourcesImpl::FontPtr ResourcesImpl::loadFont(res::FontId fontId, int ptSize)
+{
+    auto index = static_cast<size_t>(fontId);
+    const auto& fontData = _fonts.at(index);
+    TTF_Font* rawPtr = TTF_OpenFontRW(
+        SDL_RWFromConstMem(fontData.data(), (int)fontData.size()), 0, ptSize);
+    return {rawPtr, TTF_CloseFont};
+}

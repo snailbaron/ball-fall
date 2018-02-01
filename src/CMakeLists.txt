@@ -16,7 +16,7 @@ find_path (TCLAP_INCLUDE_DIR tclap/CmdLine.h)
 
 find_path (CATCH_INCLUDE_DIR catch.hpp)
 
-set (generated_dir ${CMAKE_CURRENT_BINARY_DIR}/generated)
+set (generated_dir ${CMAKE_CURRENT_SOURCE_DIR}/generated)
 set (generated_include_dir ${generated_dir}/include)
 
 include_directories (${generated_include_dir})

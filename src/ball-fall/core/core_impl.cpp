@@ -14,3 +14,8 @@ void CoreImpl::update(double delta)
         _field->update(delta);
     }
 }
+
+std::unique_ptr<Core> makeCore()
+{
+    return std::make_unique<CoreImpl>();
+}

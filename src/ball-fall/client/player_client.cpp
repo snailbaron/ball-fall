@@ -1,9 +1,8 @@
 #include "player_client.hpp"
-#include "../config.hpp"
-#include "resources.hpp"
+#include <config.hpp>
 #include "game_states/main_menu.hpp"
 #include "game_states/gameplay.hpp"
-#include "media.hpp"
+#include <platform.hpp>
 
 #include <SDL2/SDL.h>
 
@@ -20,19 +19,18 @@ PlayerClient::PlayerClient()
         _gameState = std::make_unique<Gameplay>();
     });
 
+    subscribe<SDL_Event>(evt::input(), [this] (const auto& event) {
+        if (event.type == SDL_QUIT) {
+            _active = false;
+            return;
+        }
+        _gameState->processEvent(event);
+    });
+
     _gameState = std::make_unique<MainMenu>();
 
     render();
-    SDL_ShowWindow(media::window());
-}
-
-void PlayerClient::processEvent(const SDL_Event& event)
-{
-    if (event.type == SDL_QUIT) {
-        _active = false;
-        return;
-    }
-    _gameState->processEvent(event);
+    platform::screen().show();
 }
 
 void PlayerClient::update(double delta)
@@ -42,15 +40,19 @@ void PlayerClient::update(double delta)
 
 void PlayerClient::render() const
 {
-    SDL_SetRenderDrawColor(media::renderer(), 0, 0, 0, 255);
-    SDL_RenderClear(media::renderer());
+    platform::screen().clear(Color::Black);
 
     _gameState->render();
 
-    SDL_RenderPresent(media::renderer());
+    platform::screen().present();
 }
 
 bool PlayerClient::active() const
 {
     return _active;
+}
+
+std::unique_ptr<Client> makePlayerClient()
+{
+    return std::make_unique<PlayerClient>();
 }

@@ -11,7 +11,6 @@ macro (MODULE)
     cmake_parse_arguments (
         MODULE "${options}" "${oneValueArgs}" "${multiValueArgs}" "${ARGN}")
 
-    message (STATUS "adding include directory: ${CMAKE_CURRENT_SOURCE_DIR}/include")
     target_include_directories (ball-fall PRIVATE include)
 
     set (sources ${MODULE_SOURCES})
@@ -20,11 +19,12 @@ macro (MODULE)
     target_sources (ball-fall PRIVATE ${sources})
 endmacro ()
 
-add_subdirectory (util)
 add_subdirectory (client)
+add_subdirectory (config)
 add_subdirectory (core)
 add_subdirectory (geometry)
 add_subdirectory (platform)
+add_subdirectory (util)
 
 add_custom_command (
     OUTPUT resources.data

@@ -16,13 +16,4 @@ Scene::Scene()
 
 void Scene::render() const
 {
-    SDL_Rect dstRect {
-        static_cast<int>(_ballPosition.x * 10),
-        static_cast<int>(_ballPosition.y * 10),
-        32,
-        32
-    };
-    SDL_RenderCopy(media::renderer(), resources::texture(res::BitmapId::Ball), nullptr, &dstRect);
-
-
 }

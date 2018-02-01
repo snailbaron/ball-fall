@@ -1,22 +1,23 @@
 #pragma once
 
 #include "game_states/game_state.hpp"
-#include <player_client.hpp>
+#include <client/client.hpp>
 #include <platform/events.hpp>
 
 #include <SDL2/SDL.h>
 
 #include <memory>
 
-class PlayerClient : public evening::Subscriber {
+class PlayerClient
+        : public Client
+        , public evening::Subscriber {
 public:
     PlayerClient();
 
-    void processEvent(const SDL_Event& event);
-    void update(double delta);
-    void render() const;
+    void update(double delta) override;
+    void render() const override;
 
-    bool active() const;
+    bool active() const override;
 
 private:
     bool _active = true;

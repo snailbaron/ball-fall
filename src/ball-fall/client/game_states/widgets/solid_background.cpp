@@ -1,5 +1,5 @@
 #include "solid_background.hpp"
-#include "../../media.hpp"
+#include <platform.hpp>
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
@@ -15,5 +15,5 @@ SolidBackground& SolidBackground::color(const Color& color)
 
 void SolidBackground::render() const
 {
-    media::screen().clear(_color);
+    platform::screen().clear(_color);
 }

@@ -4,13 +4,19 @@ namespace evt {
 
 namespace {
 
-evening::Channel g_eventChannel;
+evening::Channel g_bus;
+evening::Channel g_input;
 
 } // namespace
 
 evening::Channel& bus()
 {
-    return g_eventChannel;
+    return g_bus;
+}
+
+evening::Channel& input()
+{
+    return g_input;
 }
 
 } // namespace evt

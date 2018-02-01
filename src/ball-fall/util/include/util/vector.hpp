@@ -34,3 +34,17 @@ bool operator!=(const Vector<T>& left, const Vector<T>& right)
 {
     return !(left == right);
 }
+
+template <class L, class R>
+Vector<decltype(std::declval<L>() + std::declval<R>())>
+operator+(const Vector<L>& left, const Vector<R>& right)
+{
+    return {left.x + right.x, left.y + right.y};
+}
+
+template <class L, class R>
+Vector<decltype(std::declval<L>() - std::declval<R>())>
+operator-(const Vector<L>& left, const Vector<R>& right)
+{
+    return {left.x - right.x, left.y - right.y};
+}
