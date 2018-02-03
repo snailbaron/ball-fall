@@ -1,11 +1,8 @@
 #pragma once
 
 #include <util/vector.hpp>
-#include <platform/resources.hpp>
-
-#include <SDL2/SDL.h>
-
-struct SDL_Renderer;
+#include <platform.hpp>
+#include <sdl_wrapper.hpp>
 
 class Widget {
 public:

@@ -1,5 +1,5 @@
 #include "core_impl.hpp"
-#include <platform/events.hpp>
+#include <platform.hpp>
 
 CoreImpl::CoreImpl()
 {

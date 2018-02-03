@@ -63,7 +63,7 @@ void Panel::processEvent(const SDL_Event& event)
 
 void Panel::render() const
 {
-    platform::screen().drawRoundedBox(
+    screen::drawRoundedBox(
         vectorCast<int16_t>(_position),
         vectorCast<int16_t>(_size),
         CornerRadius,

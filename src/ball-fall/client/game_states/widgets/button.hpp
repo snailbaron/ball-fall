@@ -37,6 +37,6 @@ private:
     std::string _text;
     std::function<void()> _action = []{};
 
-    Texture _texture;
+    std::shared_ptr<Texture> _texture;
     Color _bgColor = BgColorMap.at(VisualState::Normal);
 };

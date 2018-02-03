@@ -1,5 +1,7 @@
 #pragma once
 
+#include <util/vector.hpp>
+
 #include <cstdint>
 #include <memory>
 
@@ -16,14 +18,16 @@ struct Color {
     static const Color Black;
 };
 
-struct SDL_Texture;
+class Texture {
+public:
+    virtual ~Texture() {}
 
-struct Texture {
-    Texture();
-    Texture(int width, int height, SDL_Texture* texture);
-    ~Texture();
+    virtual const Vector<int>& size() const = 0;
+};
 
-    int width;
-    int height;
-    SDL_Texture* ptr;
+class Font {
+public:
+    virtual ~Font() {}
+
+    virtual int size() const = 0;
 };

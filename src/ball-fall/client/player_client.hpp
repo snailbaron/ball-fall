@@ -2,9 +2,7 @@
 
 #include "game_states/game_state.hpp"
 #include <client/client.hpp>
-#include <platform/events.hpp>
-
-#include <SDL2/SDL.h>
+#include <platform.hpp>
 
 #include <memory>
 

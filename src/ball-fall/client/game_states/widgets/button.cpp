@@ -1,9 +1,6 @@
 #include "button.hpp"
 #include <platform.hpp>
 
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_ttf.h>
-
 #include <utility>
 
 const std::map<Widget::VisualState, Color> Button::BgColorMap {
@@ -38,12 +35,12 @@ Button& Button::action(std::function<void()> action)
 
 void Button::render() const
 {
-    platform::screen().drawRect(_position, _size, BorderColor);
-    platform::screen().drawRect(
+    screen::drawRect(_position, _size, BorderColor);
+    screen::drawRect(
         _position + Vector<int>{BorderSize, BorderSize},
         _size - Vector<int>{2 * BorderSize, 2 * BorderSize},
         _bgColor);
-    platform::screen().drawTexture(
+    screen::drawTexture(
         _position + Vector<int>{2 * BorderSize, 2 * BorderSize},
         _texture);
 }
@@ -71,7 +68,7 @@ void Button::onActivate()
 
 void Button::recalculateTexture()
 {
-    _texture = platform::screen().textTexture(
+    _texture = resource::textTexture(
         _text,
         Font,
         Color{0, 0, 0},

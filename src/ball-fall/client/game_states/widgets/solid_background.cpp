@@ -15,5 +15,5 @@ SolidBackground& SolidBackground::color(const Color& color)
 
 void SolidBackground::render() const
 {
-    platform::screen().clear(_color);
+    screen::clear(_color);
 }

@@ -4,7 +4,7 @@
 #include "game_states/gameplay.hpp"
 #include <platform.hpp>
 
-#include <SDL2/SDL.h>
+#include <sdl_wrapper.hpp>
 
 #include <stdexcept>
 #include <utility>
@@ -30,7 +30,7 @@ PlayerClient::PlayerClient()
     _gameState = std::make_unique<MainMenu>();
 
     render();
-    platform::screen().show();
+    screen::show();
 }
 
 void PlayerClient::update(double delta)
@@ -40,11 +40,11 @@ void PlayerClient::update(double delta)
 
 void PlayerClient::render() const
 {
-    platform::screen().clear(Color::Black);
+    screen::clear(Color::Black);
 
     _gameState->render();
 
-    platform::screen().present();
+    screen::present();
 }
 
 bool PlayerClient::active() const

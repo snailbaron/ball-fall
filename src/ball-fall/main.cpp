@@ -4,20 +4,19 @@
 #include <client/client.hpp>
 #include <platform.hpp>
 
-#include <SDL2/SDL.h>
+#include <sdl_wrapper.hpp>
 
 int main(int /*argc*/, char* /*argv*/[])
 {
-    platform::init();
+    sdl::init();
 
     auto core = makeCore();
     auto client = makePlayerClient();
 
     auto timer = FrameTimer(config::GameFps);
     while (client->active()) {
-        SDL_Event event;
-        while (SDL_PollEvent(&event)) {
-            evt::input().send(event);
+        while (auto event = sdl().pollEvent()) {
+            evt::input().send(*event);
         }
 
         auto framesPassed = timer.framesPassed();
@@ -32,7 +31,10 @@ int main(int /*argc*/, char* /*argv*/[])
         }
     }
 
-    platform::kill();
+    client.reset();
+    core.reset();
+
+    sdl::quit();
 
     return 0;
 }
