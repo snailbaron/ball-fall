@@ -18,16 +18,11 @@ struct Color {
     static const Color Black;
 };
 
-class Texture {
-public:
-    virtual ~Texture() {}
-
-    virtual const Vector<int>& size() const = 0;
+class Image {
 };
 
-class Font {
-public:
-    virtual ~Font() {}
+class Sprite : public Image {
+};
 
-    virtual int size() const = 0;
+class Animation : public Image {
 };

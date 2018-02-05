@@ -1,6 +1,6 @@
 #pragma once
 
-#include "surface.hpp"
+#include <sdl_wrapper/surface.hpp>
 
 #include <SDL2/SDL_image.h>
 

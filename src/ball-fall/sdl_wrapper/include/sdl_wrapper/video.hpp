@@ -1,7 +1,7 @@
 #pragma once
 
-#include "internal/wrapper.hpp"
-#include "render.hpp"
+#include <sdl_wrapper/internal/wrapper.hpp>
+#include <sdl_wrapper/render.hpp>
 
 #include <cstdint>
 #include <string>
@@ -11,6 +11,7 @@ namespace sdl {
 class Window : public internal::Wrapper<SDL_Window, SDL_DestroyWindow> {
 public:
     using Wrapper::Wrapper;
+    using Wrapper::reset;
 
     Renderer createRenderer(int index, uint32_t flags) const
     {

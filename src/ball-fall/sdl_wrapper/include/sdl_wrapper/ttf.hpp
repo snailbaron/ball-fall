@@ -1,7 +1,7 @@
 #pragma once
 
-#include "internal/wrapper.hpp"
-#include "surface.hpp"
+#include <sdl_wrapper/internal/wrapper.hpp>
+#include <sdl_wrapper/surface.hpp>
 
 #include <SDL2/SDL_pixels.h>
 #include <SDL2/SDL_ttf.h>
@@ -25,6 +25,7 @@ void quit()
 class Font : public internal::Wrapper<TTF_Font, TTF_CloseFont> {
 public:
     using Wrapper::Wrapper;
+    using Wrapper::reset;
 
     std::tuple<int, int> sizeUtf8(const std::string& text) const
     {
