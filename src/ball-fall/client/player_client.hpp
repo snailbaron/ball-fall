@@ -1,8 +1,9 @@
 #pragma once
 
 #include "game_states/game_state.hpp"
-#include <client/client.hpp>
-#include <platform.hpp>
+#include <client.hpp>
+#include <platform/screen.hpp>
+#include <platform/resources.hpp>
 
 #include <memory>
 
@@ -19,5 +20,7 @@ public:
 
 private:
     bool _active = true;
+    Screen _screen;
+    Resources _resources;
     std::unique_ptr<GameState> _gameState;
 };

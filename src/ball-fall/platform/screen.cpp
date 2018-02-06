@@ -1,72 +1,43 @@
 #include <platform/screen.hpp>
 
-Screen::Config::Config()
-    : title("Ball Fall")
-    , width(1024)
-    , height(768)
+#include <utility>
+
+Screen::Screen(sdl::Renderer renderer)
+    : _renderer(std::move(renderer))
 { }
 
-Screen::Screen(const Config& config);
+void Screen::clear(const Color& color)
 {
-    _window = sdl::createWindow(
-        config.title,
-        SDL_WINDOWPOS_UNDEFINED,
-        SDL_WINDOWPOS_UNDEFINED,
-        config.width,
-        config.height,
-        0);
-    _renderer = _window.createRenderer(
-        -1,
-        SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    _renderer.setDrawColor(color.r, color.g, color.b, color.a);
+    _renderer.clear();
 }
 
-Screen::~Screen()
+void Screen::present()
 {
-    _renderer.reset();
-    _window.reset();
+    _renderer.present();
 }
 
-void Screen::show()
-{
-    SDL_ShowWindow(window());
-}
-
-void clear(const Color& color)
-{
-    SDL_SetRenderDrawColor(renderer(), color.r, color.g, color.b, color.a);
-    SDL_RenderClear(renderer());
-}
-
-void present()
-{
-    SDL_RenderPresent(renderer());
-}
-
-void drawRect(
+void Screen::drawRect(
     const Vector<int>& position, const Vector<int>& size, const Color& color)
 {
-    SDL_SetRenderDrawColor(renderer(), color.r, color.g, color.b, color.a);
+    _renderer.setDrawColor(color.r, color.g, color.b, color.a);
     SDL_Rect rect {position.x, position.y, size.x, size.y};
-    SDL_RenderFillRect(renderer(), &rect);
+    _renderer.fillRect(rect);
 }
 
-void drawRoundedBox(
+void Screen::drawRoundedBox(
     const Vector<int16_t>& position,
     const Vector<int16_t>& size,
     int16_t cornerRadius,
     const Color& color)
 {
-    int result = roundedBoxRGBA(
-        renderer(),
+    renderer.roundedBoxRGBA(
         position.x, position.y, position.x + size.x, position.y + size.y,
         cornerRadius,
         color.r, color.g, color.b, color.a);
-    assert(result == 0);
 }
 
-void drawTexture(
-    const Vector<int>& position,
-    const std::shared_ptr<Texture>& texture)
+void Screen::drawSprite(const Vector<int>& position, const Sprite& sprite)
 {
     SDL_Rect dstRect {
         position.x,
@@ -74,7 +45,5 @@ void drawTexture(
         position.x + texture.width,
         position.y + texture.height
     };
-
-    auto textureImpl = std::static_pointer_cast<TextureImpl>(texture);
-    SDL_RenderCopy(renderer(), textureImpl->raw(), nullptr, &dstRect);
+    _renderer.copy(sprite.texture, nullptr, dstRect);
 }

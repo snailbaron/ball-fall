@@ -17,6 +17,11 @@ public:
     {
         return Renderer(SDL_CreateRenderer(get(), index, flags));
     }
+
+    void show() const
+    {
+        SDL_ShowWindow(get());
+    }
 };
 
 Window createWindow(

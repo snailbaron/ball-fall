@@ -1,6 +1,7 @@
+#include "config.hpp"
+
 #include <core.hpp>
 #include <util/timer.hpp>
-#include <config.hpp>
 #include <client/client.hpp>
 #include <platform.hpp>
 
@@ -8,12 +9,15 @@
 
 int main(int /*argc*/, char* /*argv*/[])
 {
+    // Imitate config reading
+    Config config {};
+
     sdl::init();
 
     auto core = makeCore();
     auto client = makePlayerClient();
 
-    auto timer = FrameTimer(config::GameFps);
+    auto timer = FrameTimer(config.gameFps);
     while (client->active()) {
         while (auto event = sdl().pollEvent()) {
             evt::input().send(*event);

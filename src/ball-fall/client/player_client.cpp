@@ -12,6 +12,9 @@
 
 PlayerClient::PlayerClient()
 {
+
+
+
     subscribe<evt::Quit>(evt::bus(), [this] (const auto&) {
         _active = false;
     });

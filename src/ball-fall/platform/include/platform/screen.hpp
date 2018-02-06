@@ -1,24 +1,14 @@
 #pragma once
 
-#include "types.hpp"
-#include "vector.hpp"
+#include <platform/types.hpp>
+#include <platform/vector.hpp>
 
 #include <sdl_wrapper.hpp>
+#include <string>
 
 class Screen {
 public:
-    struct Config {
-        Config();
-
-        std::string title;
-        int width;
-        int height;
-    };
-
-    Screen(const Config& config = Config());
-    ~Screen();
-
-    void show();
+    Screen(sdl::Renderer renderer);
 
     void clear(const Color& color);
     void present();
@@ -34,9 +24,8 @@ public:
         int16_t cornerRadius,
         const Color& color);
 
-    void drawImage(const Vector<int>& position, const Image& image);
+    void drawSprite(const Vector<int>& position, const Sprite& sprite);
 
 private:
-    sdl::Window _window;
     sdl::Renderer _renderer;
 };

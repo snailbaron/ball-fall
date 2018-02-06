@@ -1,30 +1,27 @@
 #pragma once
 
-#include "resources.hpp"
-#include "lru_cache.hpp"
-#include "static_platform.hpp"
-
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
+#include <platform/resources.hpp>
+#include <platform/screen.hpp>
 
 #include <util.hpp>
-#include <config.hpp>
+
+#include <utility>
+#include <tuple>
 
 namespace flat = BallFall::Resources;
 
-using static_platform::renderer;
-
-Resources::Resources()
-    : _sizedFonts(
+Resources::Resources(sdl::Renderer renderer)
+    : _renderer(std::move(renderer))
+    , _sizedFonts(
         20,
         [this] (res::FontId fontId, int ptSize) {
             return loadFont(fontId, ptSize);
         })
 { }
 
-void Resources::load()
+void Resources::load(const std::string& resourceFile)
 {
-    auto resourceData = util::readFile(config::ResourceFile);
+    auto resourceData = util::readFile(resourceFile);
     const auto* resources = flat::GetResources(resourceData.data());
 
     for (const auto& font : *resources->fonts()) {
@@ -34,22 +31,15 @@ void Resources::load()
     }
 
     for (const auto& bitmap : *resources->bitmaps()) {
-        auto rawSurface =
-            IMG_Load_RW(
-                SDL_RWFromConstMem(
-                    bitmap->data()->data(), bitmap->data()->size()), 0);
+        auto surface = sdl::img::loadRW(
+            SDL_RWFromConstMem(
+                bitmap->data()->data(), bitmap->data()->size()), 0);
 
-        int width = rawSurface->w;
-        int height = rawSurface->h;
+        int width = surface.w;
+        int height = surface.h;
 
-        auto rawTexture =
-            SDL_CreateTextureFromSurface(renderer(), surface.raw());
-
-        std::shared_ptr<Texture> texture = std::make_shared<TextureImpl>(
-            {width, height}, rawTexture);
-
-        SDL_FreeSurface(surface);
-        _textures.push_back(texture);
+        auto texture = _renderer.createTextureFromSurface(surface);
+        _textures.push_back(std::make_shared<Sprite>(std::move(texture)));
     }
 }
 
@@ -60,21 +50,46 @@ void Resources::clear()
     _textures.clear();
 }
 
-std::shared_ptr<Font> Resources::font(res::FontId fontId, int ptSize)
+sdl::ttf::Font Resources::font(res::FontId fontId, int ptSize)
 {
-    return _sizedFonts.get(fontId, ptSize).get();
+    return _sizedFonts.get(fontId, ptSize);
 }
 
-std::shared_ptr<Texture> Resources::texture(res::BitmapId bitmapId)
+std::shared_ptr<Image> Resources::image(res::BitmapId bitmapId)
 {
-    return _textures.at(static_cast<size_t>(bitmapId));
+    return _images.at(static_cast<size_t>(bitmapId));
 }
 
-std::shared_ptr<Font> Resources::loadFont(res::FontId fontId, int ptSize) const
+std::shared_ptr<Image> Resources::textImage(
+    const std::string& text,
+    res::FontId fontId,
+    const Color& textColor,
+    const Color& bgColor,
+    const util::Vector<int>& desiredSize)
+{
+    int height = desiredSize.y;
+    auto font = this->font(fontId, height);
+
+    int width;
+    std::tie(width, std::ignore) = font.sizeUtf8(text);
+    while (width > desiredSize.x) {
+        height = height * desiredSize.x / width;
+        font = this->font(fontId, height);
+        std::tie(width, std::ignore) = font.sizeUtf8(text);
+    }
+
+    auto surface =
+        font.renderUtf8Shaded(text, sdlColor(textColor), sdlColor(bgColor));
+    auto texture = _renderer.createTextureFromSurface(surface);
+    return std::make_shared<Sprite>(texture);
+}
+
+sdl::ttf::Font Resources::loadFont(res::FontId fontId, int ptSize) const
 {
     auto index = static_cast<size_t>(fontId);
     const auto& fontData = _fonts.at(index);
-    TTF_Font* rawPtr = TTF_OpenFontRW(
-        SDL_RWFromConstMem(fontData.data(), (int)fontData.size()), 0, ptSize);
-    return std::make_shared<FontImpl>(rawPtr);
+    return sdl::ttf::openFont(
+        SDL_RWFromConstMem(fontData.data(), (int)fontData.size()),
+        0,
+        ptSize);
 }

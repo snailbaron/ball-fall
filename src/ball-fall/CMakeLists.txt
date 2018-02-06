@@ -20,10 +20,10 @@ macro (MODULE)
 endmacro ()
 
 add_subdirectory (client)
-add_subdirectory (config)
 add_subdirectory (core)
 add_subdirectory (geometry)
 add_subdirectory (platform)
+add_subdirectory (sdl_wrapper)
 add_subdirectory (util)
 
 add_custom_command (

@@ -19,9 +19,14 @@ void quit()
     IMG_Quit();
 }
 
-Surface LibraryImpl::load(const std::string& file)
+Surface load(const std::string& file)
 {
     return Surface(IMG_Load(file.c_str()));
+}
+
+Surface loadRW(SDL_RWops* src, int freesrc)
+{
+    return Surface(IMG_Load_RW(src, freesrc));
 }
 
 }} // namespace sdl::img
